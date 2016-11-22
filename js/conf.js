@@ -1,12 +1,12 @@
 const imgs = {
 	cards: {
-		path: 'assets/Cards/',
+		path: 'assets/PNG/Cards/',
 		ext: 'png',
 		back: {
 			blue: 'cardBack_blue5',
 			red: 'cardBack_red5',
 		},
-		getCard: function(suit, value){
+		get: function(suit, value){
 			return `${this.path}card${suit}${value}.${this.ext}`;
 		},
 	}
