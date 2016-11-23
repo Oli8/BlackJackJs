@@ -21,19 +21,19 @@ cards.push('J', 'Q', 'K', 'A');
 
 class Card{
 
-	constructor(suit, value){
+	constructor(suit, value, hided = false){
 		this.suit = suit;
 		this.value = value;
+		this.hided = hided;
 	}
 
 }
 
-// var deck = [];
-// for(var suit of suits){
-// 	for(var i=2; i<11; i++)
-// 		deck.push(new Card(suit, i));
-	
-// 	for(var v of ['J', 'Q', 'K', 'A'])
-// 		deck.push(new Card(suit, v));
-// }
+function rand(min, max){
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
+
+function l(v){
+	console.log(v);
+}
