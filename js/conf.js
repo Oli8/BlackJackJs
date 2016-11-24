@@ -19,16 +19,6 @@ for(let i=2; i<11; i++)
 
 cards.push('J', 'Q', 'K', 'A');
 
-class Card{
-
-	constructor(suit, value, hided = false){
-		this.suit = suit;
-		this.value = value;
-		this.hided = hided;
-	}
-
-}
-
 function rand(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
