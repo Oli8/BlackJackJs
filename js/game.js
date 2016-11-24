@@ -7,13 +7,14 @@ function init(){
 		deck: [],
 
 		start: function(){
+			createjs.Ticker.addEventListener("tick", tick);
+			createjs.Ticker.setFPS(60);
 			this.buildDeck();
 			this.distributeCard('player');
 			this.distributeCard('player');
 			this.distributeCard('bank');
 			this.distributeCard('bank', true);
-			console.table(bank.deck);
-			console.table(player.deck);
+			this.displayCard();
 		},
 
 		buildDeck: function(){
@@ -32,7 +33,6 @@ function init(){
 
 		distributeCard(to, hided = false){
 			var index = rand(0, this.deck.length - 1);
-			console.log(index, this.deck[index]);
 			var card = this.deck[index];
 			if(hided) card.hided = true;
 
@@ -44,24 +44,58 @@ function init(){
 			this.deck.splice(index, 1);
 		},
 
+		displayCard: function(){
+			if(!bank.cardsContainer){
+				bank.cardsContainer = new createjs.Container();
+				bank.cardsContainer.x = 450; //do this better later
+				bank.cardsContainer.y = -100;
+				stage.addChild(bank.cardsContainer);
+			}
+			if(!player.cardsContainer){
+				player.cardsContainer = new createjs.Container();
+				player.cardsContainer.x = 450; //do this better later
+				player.cardsContainer.y = 300;
+				stage.addChild(player.cardsContainer);
+			}
+
+			bank.deck.forEach(function(card, index){
+				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
+				var bankCard = new createjs.Bitmap(cardSrc);
+				bankCard.x = 50 * index;
+				bankCard.y = 100;
+				bank.cardsContainer.addChild(bankCard);
+			})
+
+			player.deck.forEach(function(card, index){
+				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
+				var playerCard = new createjs.Bitmap(cardSrc);
+				playerCard.x = 50 * index;
+				playerCard.y = 100;
+				player.cardsContainer.addChild(playerCard);
+			})
+		}
+
 	};
 
 	var bank = {
 
-		deck: []
+		deck: [],
+		cardsContainer: false,
 
 	};
 
 	var player = {
 
 		deck: [],
+		cardsContainer: false,
 		funds: 1000
 
 	};
 
+	function tick(){
+		stage.update();
+	}
+
 	game.start();
-	//game.deck.forEach(v => console.log(v))
-	// console.table(bank.deck);
-	// console.table(player.deck);
-	l(game.deck.length);
+
 }
