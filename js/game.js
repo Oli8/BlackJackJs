@@ -6,7 +6,7 @@ function init(){
 
 		deck: [],
 		buttons: [
-			new Button('Hit', '#fff', 100, 100, () => l('hit')),
+			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => l('stand'))
 		],
 		buttonContainer: false,
@@ -20,7 +20,6 @@ function init(){
 			this.distributeCard('player');
 			this.distributeCard('bank');
 			this.distributeCard('bank', true);
-			this.displayCard();
 			this.addButtons();
 		},
 
@@ -49,21 +48,23 @@ function init(){
 				player.deck.push(card)
 
 			this.deck.splice(index, 1);
+			this.displayCard();
 		},
 
 		displayCard: function(){
 			if(!bank.cardsContainer){
 				bank.cardsContainer = new createjs.Container();
-				bank.cardsContainer.x = 450; //do this better later
 				bank.cardsContainer.y = -100;
 				stage.addChild(bank.cardsContainer);
 			}
 			if(!player.cardsContainer){
 				player.cardsContainer = new createjs.Container();
-				player.cardsContainer.x = 450; //do this better later
 				player.cardsContainer.y = 300;
 				stage.addChild(player.cardsContainer);
 			}
+
+			bank.cardsContainer.x = 500; //do this better later
+			player.cardsContainer.x = 500; //do this better later
 
 			bank.deck.forEach(function(card, index){
 				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
@@ -71,6 +72,7 @@ function init(){
 				bankCard.x = 50 * index;
 				bankCard.y = 100;
 				bank.cardsContainer.addChild(bankCard);
+				bank.cardsContainer.x -= 20;
 			})
 
 			player.deck.forEach(function(card, index){
@@ -79,7 +81,9 @@ function init(){
 				playerCard.x = 50 * index;
 				playerCard.y = 100;
 				player.cardsContainer.addChild(playerCard);
+				player.cardsContainer.x -= 20;
 			})
+
 		},
 
 		addButtons: function(){
@@ -119,7 +123,12 @@ function init(){
 
 		deck: [],
 		cardsContainer: false,
-		funds: 1000
+		funds: 1000,
+
+		hit: function(){
+			l('hit');
+			game.distributeCard('player');
+		},
 
 	};
 
