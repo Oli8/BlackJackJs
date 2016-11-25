@@ -48,10 +48,10 @@ function init(){
 			return total;
 		},
 
-		distributeCard(to, hided = false){
+		distributeCard(to, hidden = false){
 			var index = rand(0, this.deck.length - 1);
 			var card = this.deck[index];
-			if(hided) card.hided = true;
+			if(hidden) card.hidden = true;
 
 			if(to == 'bank')
 				bank.deck.push(card)
@@ -77,7 +77,7 @@ function init(){
 			}
 
 			if(owner === 'bank'){
-				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
+				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var bankCard = new createjs.Bitmap(cardSrc);
 				bankCard.x = 0;
 				bankCard.y = -100;
@@ -87,7 +87,7 @@ function init(){
 				bank.cardsContainer.x -= 20;
 			}
 			else if(owner === 'player' ){
-				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
+				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var playerCard = new createjs.Bitmap(cardSrc);
 				playerCard.x = 100;
 				playerCard.y = -400;
