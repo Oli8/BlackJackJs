@@ -131,6 +131,29 @@ function init(){
 
 		check: function(){
 			l('check decks');
+			var bankScore = this.deckValue(bank.deck);
+			var playerScore = this.deckValue(player.deck);
+
+			if(bankScore === 21 && bank.deck.length === 2)
+				bank.blackjack = true;
+			if(playerScore === 21 && player.deck.length === 2)
+				player.blackjack = true;
+
+			if(bank.blackjack && player.blackjack)
+				player.draw();
+			else if(bank.blackjack)
+				player.lose();
+			else if(player.blackjack)
+				player.win();
+
+			if(bankScore > 21)
+				player.win();
+			else if(bankScore >= 17 && bankScore <= 21){
+				if(playerScore === bankScore - 1 || playerScore === bankScore + 1)
+					player.win();
+				else
+					player.lose();
+			}
 		}
 
 	};
@@ -139,6 +162,7 @@ function init(){
 
 		deck: [],
 		cardsContainer: false,
+		blackJack: false,
 
 		play: function(){
 			l('bank turn to play :D');
@@ -154,6 +178,8 @@ function init(){
 			}
 			else
 				game.check();
+
+			//check not called when bank pick cards /!\
 		},
 
 	};
@@ -162,6 +188,7 @@ function init(){
 
 		deck: [],
 		cardsContainer: false,
+		blackjack: false,
 		canHit: true,
 		funds: 1000,
 
@@ -176,6 +203,18 @@ function init(){
 			l('stand!');
 			this.canHit = false;
 			bank.play();
+		},
+
+		win: function(){
+			l('win!');
+		},
+
+		lose: function(){
+			l('lose');
+		},
+
+		draw: function(){
+			l('draw :|');
 		}
 
 	};
