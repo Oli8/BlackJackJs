@@ -48,41 +48,45 @@ function init(){
 				player.deck.push(card)
 
 			this.deck.splice(index, 1);
-			this.displayCard();
+			this.displayCard(card, to);
 		},
 
-		displayCard: function(){
+		displayCard: function(card, owner){
 			if(!bank.cardsContainer){
 				bank.cardsContainer = new createjs.Container();
 				bank.cardsContainer.y = -100;
 				stage.addChild(bank.cardsContainer);
+				bank.cardsContainer.x = 450; //do this better later
 			}
 			if(!player.cardsContainer){
 				player.cardsContainer = new createjs.Container();
 				player.cardsContainer.y = 300;
 				stage.addChild(player.cardsContainer);
+				player.cardsContainer.x = 450; //do this better later
 			}
 
-			bank.cardsContainer.x = 500; //do this better later
-			player.cardsContainer.x = 500; //do this better later
 
-			bank.deck.forEach(function(card, index){
+			if(owner === 'bank'){
 				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var bankCard = new createjs.Bitmap(cardSrc);
-				bankCard.x = 50 * index;
-				bankCard.y = 100;
+				bankCard.x = 0;
+				bankCard.y = -100;
 				bank.cardsContainer.addChild(bankCard);
+				//rotation ?
+				createjs.Tween.get(bankCard)
+	               .to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				bank.cardsContainer.x -= 20;
-			})
-
-			player.deck.forEach(function(card, index){
+			}
+			else if(owner === 'player' ){
 				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var playerCard = new createjs.Bitmap(cardSrc);
-				playerCard.x = 50 * index;
-				playerCard.y = 100;
+				playerCard.x = 100;
+				playerCard.y = -400;
 				player.cardsContainer.addChild(playerCard);
+				createjs.Tween.get(playerCard)
+	               .to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				player.cardsContainer.x -= 20;
-			})
+			}
 
 		},
 
