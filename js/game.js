@@ -150,7 +150,7 @@ function init(){
 				game.distributeCard('bank');
 				l(game.deckValue(this.deck))
 				if(game.deckValue(this.deck) < 17)
-					this.play();
+					setTimeout(() => bank.play(), 1000);
 			}
 			else
 				game.check();
