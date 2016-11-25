@@ -142,6 +142,9 @@ function init(){
 
 		play: function(){
 			l('bank turn to play :D');
+			if(this.deck.length === 2)
+				this.cardsContainer.children[1].image.src = imgs.cards.get(this.deck[1].suit, this.deck[1].value);
+
 			var total = game.deckValue(this.deck);
 			if(total < 17){
 				game.distributeCard('bank');
