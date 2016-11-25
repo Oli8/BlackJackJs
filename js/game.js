@@ -96,8 +96,10 @@ function init(){
 					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				player.cardsContainer.x -= 20;
 				l(this.deckValue(player.deck));
-				if(this.deckValue(player.deck) > 21)
+				if(this.deckValue(player.deck) > 21){
 					player.canHit = false;
+					l('you lost');
+				}
 			}
 
 		},
@@ -150,7 +152,7 @@ function init(){
 			if(this.canHit)
 				game.distributeCard('player');
 			else
-				l('you lost');
+				l('no can do');
 		},
 
 		stand: function(){
