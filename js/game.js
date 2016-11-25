@@ -85,6 +85,7 @@ function init(){
 				createjs.Tween.get(bankCard)
 					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				bank.cardsContainer.x -= 20;
+				l('bank: ' + this.deckValue(bank.deck));
 			}
 			else if(owner === 'player' ){
 				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
@@ -95,7 +96,7 @@ function init(){
 				createjs.Tween.get(playerCard)
 					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				player.cardsContainer.x -= 20;
-				l(this.deckValue(player.deck));
+				l('player :' + this.deckValue(player.deck));
 				if(this.deckValue(player.deck) > 21){
 					player.canHit = false;
 					l('you lost');
@@ -128,6 +129,10 @@ function init(){
 			})
 		},
 
+		check: function(){
+			l('check decks');
+		}
+
 	};
 
 	var bank = {
@@ -137,6 +142,15 @@ function init(){
 
 		play: function(){
 			l('bank turn to play :D');
+			var total = game.deckValue(this.deck);
+			if(total < 17){
+				game.distributeCard('bank');
+				l(game.deckValue(this.deck))
+				if(game.deckValue(this.deck) < 17)
+					this.play();
+			}
+			else
+				game.check();
 		},
 
 	};
