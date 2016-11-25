@@ -7,7 +7,7 @@ function init(){
 		deck: [],
 		buttons: [
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
-			new Button('Stand', '#fff', 200, 100, () => l('stand'))
+			new Button('Stand', '#fff', 200, 100, () => player.stand())
 		],
 		buttonContainer: false,
 
@@ -33,8 +33,19 @@ function init(){
 			}
 		},
 
-		deckValue: function(){
+		deckValue: function(deck){
+			var total = 0;
 
+			deck.forEach(function(card){
+				if(card.value >= 2 && card.value < 11)
+					total += card.value;
+				if(['J', 'Q', 'K'].includes(card.value))
+					total += 10;
+				if(card.value == 'A')
+					total += 11; //review later
+			});
+
+			return total;
 		},
 
 		distributeCard(to, hided = false){
@@ -65,16 +76,14 @@ function init(){
 				player.cardsContainer.x = 450; //do this better later
 			}
 
-
 			if(owner === 'bank'){
 				var cardSrc = card.hided ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var bankCard = new createjs.Bitmap(cardSrc);
 				bankCard.x = 0;
 				bankCard.y = -100;
 				bank.cardsContainer.addChild(bankCard);
-				//rotation ?
 				createjs.Tween.get(bankCard)
-	               .to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
+					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				bank.cardsContainer.x -= 20;
 			}
 			else if(owner === 'player' ){
@@ -84,8 +93,11 @@ function init(){
 				playerCard.y = -400;
 				player.cardsContainer.addChild(playerCard);
 				createjs.Tween.get(playerCard)
-	               .to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
+					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				player.cardsContainer.x -= 20;
+				l(this.deckValue(player.deck));
+				if(this.deckValue(player.deck) > 21)
+					player.canHit = false;
 			}
 
 		},
@@ -121,18 +133,31 @@ function init(){
 		deck: [],
 		cardsContainer: false,
 
+		play: function(){
+			l('bank turn to play :D');
+		},
+
 	};
 
 	var player = {
 
 		deck: [],
 		cardsContainer: false,
+		canHit: true,
 		funds: 1000,
 
 		hit: function(){
-			l('hit');
-			game.distributeCard('player');
+			if(this.canHit)
+				game.distributeCard('player');
+			else
+				l('you lost');
 		},
+
+		stand: function(){
+			l('stand!');
+			this.canHit = false;
+			bank.play();
+		}
 
 	};
 
