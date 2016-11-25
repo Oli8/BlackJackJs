@@ -175,9 +175,12 @@ function init(){
 				l(game.deckValue(this.deck))
 				if(game.deckValue(this.deck) < 17)
 					setTimeout(() => bank.play(), 1000);
+				else
+					game.check();
 			}
-			else
+			else{
 				game.check();
+			}
 
 			//check not called when bank pick cards /!\
 		},
