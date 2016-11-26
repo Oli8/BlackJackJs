@@ -178,11 +178,8 @@ function init(){
 				else
 					game.check();
 			}
-			else{
+			else
 				game.check();
-			}
-
-			//check not called when bank pick cards /!\
 		},
 
 	};
