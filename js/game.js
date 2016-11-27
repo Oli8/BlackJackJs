@@ -5,6 +5,13 @@ function init(){
 	var game = {
 
 		deck: [],
+		chipsValue: {
+			black: 100,
+			blue: 500,
+			green: 25,
+			red: 5,
+			white: 1
+		},
 		buttons: [
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => player.stand())
@@ -192,6 +199,13 @@ function init(){
 		canHit: true,
 		funds: 1000,
 		dealt: null,
+		chips: {
+			black: 2, //200
+			blue: 1, //500
+			green: 8, // 200
+			red: 15, // 75
+			white: 15 //15
+		},
 
 		hit: function(){
 			if(this.dealt)
