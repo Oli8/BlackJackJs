@@ -191,9 +191,10 @@ function init(){
 		blackjack: false,
 		canHit: true,
 		funds: 1000,
+		dealt: null,
 
 		hit: function(){
-			if(this.canHit)
+			if(this.dealt)
 				game.distributeCard('player');
 			else
 				l('no can do');

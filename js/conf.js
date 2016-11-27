@@ -9,6 +9,35 @@ const imgs = {
 		get: function(suit, value){
 			return `${this.path}card${suit}${value}.${this.ext}`;
 		},
+	},
+	chips: {
+		path: 'assets/PNG/Chips/',
+		ext: 'png',
+		black: {
+			main: 'chipBlackWhite',
+			side: 'chipBlackWhite_Side'
+		},
+		blue: {
+			main: 'chipBlueWhite',
+			side: 'chipBlueWhite_Side'
+		},
+		green: {
+			main: 'chipGreenWhite',
+			side: 'chipGreenWhite_Side'
+		},
+		red: {
+			main: 'chipRedWhite',
+			side: 'chipRedWhite_Side'
+		},
+		white: {
+			main: 'chipWhiteBlue',
+			side: 'chipWhiteBlue_Side'
+		},
+		get: function(color, type = 'main'){
+			if(color === 'White')
+				return `${this.path}chip${color}Blue.${this.ext}`;
+			return `${this.path}chip${color}White.${this.ext}`;
+		}
 	}
 };
 
