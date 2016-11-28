@@ -28,6 +28,7 @@ function init(){
 			this.distributeCard('bank');
 			this.distributeCard('bank', true);
 			this.addButtons();
+			this.addChips();
 		},
 
 		buildDeck: function(){
@@ -136,6 +137,47 @@ function init(){
 			})
 		},
 
+		addChips: function(){
+			l('add chips');
+			if(!player.chipsContainer){
+				player.chipsContainer = new createjs.Container();
+				player.chipsContainer.x = 600;
+				player.chipsContainer.y = 500;
+				stage.addChild(player.chipsContainer);
+			}
+
+			var base = {x: 100, y: 65};
+			for(chip in player.chips){
+				for(let i=0; i<player.chips[chip]; i++){
+					l('add')
+					var chipImg = new createjs.Bitmap(imgs.chips.get(chip));
+					chipImg.x = base.x;
+					chipImg.y = base.y;
+					chipImg.color = chip;
+					player.chipsContainer.addChild(chipImg);
+					base.y -= 10;
+					if(i === player.chips[chip] - 1){ //add click event on top chip
+						chipImg.cursor = 'Pointer';
+						chipImg.on('mouseover', function(event){
+							event.currentTarget.scaleX = 1.1;
+							event.currentTarget.scaleY = 1.1;
+							event.currentTarget.y -= 8;
+						});
+						chipImg.on('mouseout', function(event){
+							event.currentTarget.scaleX = 1;
+							event.currentTarget.scaleY = 1;
+							event.currentTarget.y += 8;
+						});
+						chipImg.addEventListener('click', function(event){
+							l(event.currentTarget.color);
+						});
+					}
+				}
+				base.y = 65;
+				base.x += 75;
+			}
+		},
+
 		check: function(){
 			l('check decks');
 			var bankScore = this.deckValue(bank.deck);
@@ -195,16 +237,17 @@ function init(){
 
 		deck: [],
 		cardsContainer: false,
+		chipsContainer: false,
 		blackjack: false,
 		canHit: true,
 		funds: 1000,
-		dealt: null,
+		dealt: true, //null to edit
 		chips: {
-			black: 2, //200
-			blue: 1, //500
-			green: 8, // 200
-			red: 15, // 75
-			white: 15 //15
+			Blue: 1, //500
+			Black: 2, //200
+			Green: 8, // 200
+			Red: 15, // 75
+			White: 15 //15
 		},
 
 		hit: function(){
