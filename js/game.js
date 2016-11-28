@@ -154,6 +154,7 @@ function init(){
 					chipImg.x = base.x;
 					chipImg.y = base.y;
 					chipImg.color = chip;
+					chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5);
 					player.chipsContainer.addChild(chipImg);
 					base.y -= 10;
 					if(i === player.chips[chip] - 1){ //add click event on top chip
@@ -169,13 +170,20 @@ function init(){
 							event.currentTarget.y += 8;
 						});
 						chipImg.addEventListener('click', function(event){
-							l(event.currentTarget.color);
+							game.throwChip(event.currentTarget);
 						});
 					}
 				}
 				base.y = 65;
 				base.x += 75;
 			}
+		},
+
+		throwChip: function(chip){
+			l(chip.color);
+			//var canvasMiddle = stage.canvas.width / 2;
+			createjs.Tween.get(chip)
+					.to({x: rand(-200, 50) , y: rand(-300, -150)}, 750, createjs.Ease.getPowInOut(1))
 		},
 
 		check: function(){
