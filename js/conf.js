@@ -34,6 +34,11 @@ const imgs = {
 			side: 'chipWhiteBlue_Side'
 		},
 		get: function(color, type = 'main'){
+			if(type === 'side')
+				if(color === 'White')
+					return `${this.path}chip${color}Blue_Side.${this.ext}`;
+				return `${this.path}chip${color}White_Side.${this.ext}`;
+
 			if(color === 'White')
 				return `${this.path}chip${color}Blue.${this.ext}`;
 			return `${this.path}chip${color}White.${this.ext}`;

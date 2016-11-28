@@ -150,7 +150,7 @@ function init(){
 			for(chip in player.chips){
 				for(let i=0; i<player.chips[chip]; i++){
 					l('add')
-					var chipImg = new createjs.Bitmap(imgs.chips.get(chip));
+					var chipImg = new createjs.Bitmap(imgs.chips.get(chip, 'side'));
 					chipImg.x = base.x;
 					chipImg.y = base.y;
 					chipImg.color = chip;
