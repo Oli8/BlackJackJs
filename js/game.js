@@ -145,6 +145,8 @@ function init(){
 				player.chipsContainer.y = 500;
 				stage.addChild(player.chipsContainer);
 			}
+			else
+				player.chipsContainer.removeAllChildren();
 
 			var base = {x: 100, y: 65};
 			for(var chip in player.chips){
@@ -186,6 +188,7 @@ function init(){
 			l(player.dealt);
 			player.chips[color] -= 1; //Reduce player chips number
 			l(player.chips);
+			this.addChips();
 		},
 
 		check: function(){
