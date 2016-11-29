@@ -147,7 +147,7 @@ function init(){
 			}
 
 			var base = {x: 100, y: 65};
-			for(chip in player.chips){
+			for(var chip in player.chips){
 				for(let i=0; i<player.chips[chip]; i++){
 					l('add')
 					var chipImg = new createjs.Bitmap(imgs.chips.get(chip, 'side'));
@@ -169,9 +169,7 @@ function init(){
 							event.currentTarget.scaleY = 1;
 							event.currentTarget.y += 8;
 						});
-						chipImg.addEventListener('click', function(event){
-							game.throwChip(event.currentTarget);
-						});
+						chipImg.addEventListener('click', event => game.throwChip(event.currentTarget));
 					}
 				}
 				base.y = 65;
@@ -181,9 +179,13 @@ function init(){
 
 		throwChip: function(chip){
 			l(chip.color);
-			//var canvasMiddle = stage.canvas.width / 2;
+			var color = chip.color;
 			createjs.Tween.get(chip)
-					.to({x: rand(-200, 50) , y: rand(-300, -150)}, 750, createjs.Ease.getPowInOut(1))
+				.to({x: rand(-200, 50) , y: rand(-300, -150)}, 750, createjs.Ease.getPowInOut(1));
+			player.dealt += this.chipsValue[color]; //add chip value to player.dealt
+			l(player.dealt);
+			player.chips[color] -= 1; //Reduce player chips number
+			l(player.chips);
 		},
 
 		check: function(){
@@ -249,13 +251,13 @@ function init(){
 		blackjack: false,
 		canHit: true,
 		funds: 1000,
-		dealt: true, //null to edit
+		dealt: 0, //null to edit
 		chips: {
-			Blue: 1, //500
-			Black: 2, //200
-			Green: 8, // 200
-			Red: 15, // 75
-			White: 15 //15
+			blue: 1, //500
+			black: 2, //200
+			green: 8, // 200
+			red: 15, // 75
+			white: 15 //15
 		},
 
 		hit: function(){

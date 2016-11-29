@@ -15,33 +15,26 @@ const imgs = {
 		ext: 'png',
 		black: {
 			main: 'chipBlackWhite',
-			side: 'chipBlackWhite_Side'
+			side: 'chipBlackWhite_side'
 		},
 		blue: {
 			main: 'chipBlueWhite',
-			side: 'chipBlueWhite_Side'
+			side: 'chipBlueWhite_side'
 		},
 		green: {
 			main: 'chipGreenWhite',
-			side: 'chipGreenWhite_Side'
+			side: 'chipGreenWhite_side'
 		},
 		red: {
 			main: 'chipRedWhite',
-			side: 'chipRedWhite_Side'
+			side: 'chipRedWhite_side'
 		},
 		white: {
 			main: 'chipWhiteBlue',
-			side: 'chipWhiteBlue_Side'
+			side: 'chipWhiteBlue_side'
 		},
 		get: function(color, type = 'main'){
-			if(type === 'side')
-				if(color === 'White')
-					return `${this.path}chip${color}Blue_Side.${this.ext}`;
-				return `${this.path}chip${color}White_Side.${this.ext}`;
-
-			if(color === 'White')
-				return `${this.path}chip${color}Blue.${this.ext}`;
-			return `${this.path}chip${color}White.${this.ext}`;
+			return `${this.path}${this[color][type]}.${this.ext}`;
 		}
 	}
 };
@@ -60,4 +53,8 @@ function rand(min, max){
 
 function l(v){
 	console.log(v);
+}
+
+function t(v){
+	console.table(v);
 }
