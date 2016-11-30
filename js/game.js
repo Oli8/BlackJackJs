@@ -156,6 +156,7 @@ function init(){
 					chipImg.x = base.x;
 					chipImg.y = base.y;
 					chipImg.color = chip;
+					chipImg.dealt = false;
 					chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5);
 					player.chipsContainer.addChild(chipImg);
 					base.y -= 10;
@@ -180,10 +181,16 @@ function init(){
 		},
 
 		throwChip: function(chip){
-			l(chip.color);
-			var color = chip.color;
+			if(chip.dealt) return;
+			chip.dealt = true;
+			//remove chip from player.chipsContainer and add it to stage
+			player.chipsContainer.removeChildAt(player.chipsContainer.getChildIndex(chip));
+			chip.x = chip.x + player.chipsContainer.x;
+			chip.y = chip.y + player.chipsContainer.y;
+			stage.addChild(chip);
 			createjs.Tween.get(chip)
-				.to({x: rand(-200, 50) , y: rand(-300, -150)}, 750, createjs.Ease.getPowInOut(1));
+				.to({x: rand(350, 675) , y: rand(190, 350)}, 750, createjs.Ease.getPowInOut(1));
+			var color = chip.color;
 			player.dealt += this.chipsValue[color]; //add chip value to player.dealt
 			l(player.dealt);
 			player.chips[color] -= 1; //Reduce player chips number
