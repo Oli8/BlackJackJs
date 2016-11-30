@@ -17,6 +17,16 @@ function init(){
 			new Button('Stand', '#fff', 200, 100, () => player.stand())
 		],
 		buttonContainer: false,
+		dealtChipContainer: false,
+		inProgress: false,
+		dealt: {
+			black: 0,
+			blue: 0,
+			green: 0,
+			red: 0,
+			white: 0
+		},
+		message: false,
 
 		start: function(){
 			stage.enableMouseOver(10);
@@ -143,7 +153,9 @@ function init(){
 				player.chipsContainer = new createjs.Container();
 				player.chipsContainer.x = 600;
 				player.chipsContainer.y = 500;
-				stage.addChild(player.chipsContainer);
+
+				game.dealtChipContainer = new createjs.Container();
+				stage.addChild(player.chipsContainer, game.dealtChipContainer);
 			}
 			else
 				player.chipsContainer.removeAllChildren();
@@ -181,20 +193,24 @@ function init(){
 		},
 
 		throwChip: function(chip){
-			if(chip.dealt) return;
+			if(chip.dealt || game.inProgress) return;
 			chip.dealt = true;
 			//remove chip from player.chipsContainer and add it to stage
 			player.chipsContainer.removeChildAt(player.chipsContainer.getChildIndex(chip));
 			chip.x = chip.x + player.chipsContainer.x;
 			chip.y = chip.y + player.chipsContainer.y;
-			stage.addChild(chip);
+			game.dealtChipContainer.addChild(chip);
 			createjs.Tween.get(chip)
 				.to({x: rand(350, 675) , y: rand(190, 350)}, 750, createjs.Ease.getPowInOut(1));
 			var color = chip.color;
 			player.dealt += this.chipsValue[color]; //add chip value to player.dealt
-			l(player.dealt);
+			//l(player.dealt);
 			player.chips[color] -= 1; //Reduce player chips number
-			l(player.chips);
+			//l(player.chips);
+			player.funds -= game.chipsValue[color];
+			l(player.funds);
+			game.dealt[color] += 1;
+			l(game.dealt);
 			this.addChips();
 		},
 
@@ -271,28 +287,50 @@ function init(){
 		},
 
 		hit: function(){
-			if(this.dealt)
+			if(this.dealt){
+				game.inProgress = true;
 				game.distributeCard('player');
+			}
 			else
-				l('no can do');
+				l('You need to bet first');
 		},
 
 		stand: function(){
 			l('stand!');
+			if(!this.dealt)
+				return l('You need to bet first');
+			game.inProgress = true;
 			this.canHit = false;
 			bank.play();
 		},
 
 		win: function(){
 			l('win!');
+			setTimeout(function(){
+				game.dealtChipContainer.removeAllChildren();
+				game.inProgress = false;
+				player.dealt = 0;
+				player.funds += player.dealt * 2;
+				//get Chips
+				for(var chip in game.dealt){
+					l([chip, game.dealt[chip]].join(' '))
+					player.chips[chip] += game.dealt[chip] * 2;
+				}
+				game.addChips();
+				l(player.chips);
+			}, 1000);
 		},
 
 		lose: function(){
 			l('lose');
+			game.inProgress = false;
+			this.dealt = 0;
 		},
 
 		draw: function(){
 			l('draw :|');
+			game.inProgress = false;
+			this.dealt = 0;
 		}
 
 	};
