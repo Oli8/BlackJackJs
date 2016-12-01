@@ -37,9 +37,15 @@ function init(){
 			createjs.Ticker.setFPS(60);
 			this.buildDeck();
 			this.distributeCard('player');
-			this.distributeCard('player');
-			this.distributeCard('bank');
-			this.distributeCard('bank', true);
+			setTimeout(function(){
+				game.distributeCard('player');
+				setTimeout(function(){
+					game.distributeCard('bank');
+					setTimeout(function(){
+						game.distributeCard('bank', true);
+					}, 750);
+				}, 750);
+			}, 750);
 			this.addButtons();
 			this.addChips();
 		},
@@ -47,6 +53,7 @@ function init(){
 		end: function(){
 			game.dealtChipContainer.removeAllChildren();
 			game.inProgress = false;
+			//put player and bank cards back to main deck ?
 		},
 
 		buildDeck: function(){
