@@ -26,6 +26,9 @@ function init(){
 			red: 0,
 			white: 0
 		},
+		resetChips: function(){
+			Object.keys(this.dealt).forEach(color => this.dealt[color] = 0);
+		},
 		message: false,
 
 		start: function(){
@@ -39,6 +42,11 @@ function init(){
 			this.distributeCard('bank', true);
 			this.addButtons();
 			this.addChips();
+		},
+
+		end: function(){
+			game.dealtChipContainer.removeAllChildren();
+			game.inProgress = false;
 		},
 
 		buildDeck: function(){
@@ -307,15 +315,15 @@ function init(){
 		win: function(){
 			l('win!');
 			setTimeout(function(){
-				game.dealtChipContainer.removeAllChildren();
-				game.inProgress = false;
-				player.dealt = 0;
+				game.end();
 				player.funds += player.dealt * 2;
+				player.dealt = 0;
 				//get Chips
 				for(var chip in game.dealt){
 					l([chip, game.dealt[chip]].join(' '))
 					player.chips[chip] += game.dealt[chip] * 2;
 				}
+				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
 			}, 1000);
@@ -323,14 +331,30 @@ function init(){
 
 		lose: function(){
 			l('lose');
-			game.inProgress = false;
-			this.dealt = 0;
+			setTimeout(function(){
+				game.end();
+				player.dealt = 0;
+				game.resetChips(); //reset game.dealt
+				game.addChips();
+				l(player.chips);
+			}, 1000);
 		},
 
 		draw: function(){
 			l('draw :|');
-			game.inProgress = false;
-			this.dealt = 0;
+			setTimeout(function(){
+				game.end();
+				player.funds += player.dealt ;
+				player.dealt = 0;
+				//get Chips
+				for(var chip in game.dealt){
+					l([chip, game.dealt[chip]].join(' '))
+					player.chips[chip] += game.dealt[chip] ;
+				}
+				game.resetChips(); //reset game.dealt
+				game.addChips();
+				l(player.chips);
+			}, 1000);
 		}
 
 	};
