@@ -249,7 +249,7 @@ function init(){
 			if(bankScore > 21)
 				player.win();
 			else if(bankScore >= 17 && bankScore <= 21){
-				if(playerScore === bankScore - 1 || playerScore === bankScore + 1)
+				if(playerScore > bankScore)
 					player.win();
 				else
 					player.lose();
@@ -323,13 +323,14 @@ function init(){
 			l('win!');
 			setTimeout(function(){
 				game.end();
-				player.funds += player.dealt * 2;
+				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
 				player.dealt = 0;
 				//get Chips
 				for(var chip in game.dealt){
 					l([chip, game.dealt[chip]].join(' '))
-					player.chips[chip] += game.dealt[chip] * 2;
+					player.chips[chip] += player.blackjack ? game.dealt[chip] * 3 : game.dealt[chip] * 2;
 				}
+				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
@@ -358,6 +359,7 @@ function init(){
 					l([chip, game.dealt[chip]].join(' '))
 					player.chips[chip] += game.dealt[chip] ;
 				}
+				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
