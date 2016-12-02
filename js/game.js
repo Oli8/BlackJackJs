@@ -54,15 +54,21 @@ function init(){
 			game.dealtChipContainer.removeAllChildren();
 			game.inProgress = false;
 			//put player and bank cards back to main deck ?
+			player.deck = [];
+			bank.deck = [];
+			bank.cardsContainer.removeAllChildren();
+			player.cardsContainer.removeAllChildren();
 		},
 
 		buildDeck: function(){
-			for(var suit of suits){
-				for(var i=2; i<11; i++)
-					this.deck.push(new Card(suit, i));
-				
-				for(var v of ['J', 'Q', 'K', 'A'])
-					this.deck.push(new Card(suit, v));
+			for(let i=0; i<deckNumber; i++){
+				for(var suit of suits){
+					for(let i=2; i<11; i++)
+						this.deck.push(new Card(suit, i));
+
+					for(let v of ['J', 'Q', 'K', 'A'])
+						this.deck.push(new Card(suit, v));
+				}
 			}
 		},
 
@@ -334,7 +340,7 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
-			}, 1000);
+			}, 2000);
 		},
 
 		lose: function(){
@@ -345,7 +351,7 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
-			}, 1000);
+			}, 2000);
 		},
 
 		draw: function(){
@@ -363,7 +369,7 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				l(player.chips);
-			}, 1000);
+			}, 2000);
 		}
 
 	};

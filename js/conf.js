@@ -39,6 +39,7 @@ const imgs = {
 	}
 };
 
+const deckNumber = 6;
 const suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
 var cards = [];
 for(let i=2; i<11; i++)
