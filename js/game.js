@@ -36,16 +36,7 @@ function init(){
 			createjs.Ticker.addEventListener("tick", tick);
 			createjs.Ticker.setFPS(60);
 			this.buildDeck();
-			this.distributeCard('player');
-			setTimeout(function(){
-				game.distributeCard('player');
-				setTimeout(function(){
-					game.distributeCard('bank');
-					setTimeout(function(){
-						game.distributeCard('bank', true);
-					}, 750);
-				}, 750);
-			}, 750);
+			this.new();
 			this.addButtons();
 			this.addChips();
 		},
@@ -58,6 +49,20 @@ function init(){
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
 			player.cardsContainer.removeAllChildren();
+			this.new();
+		},
+
+		new: function(){
+			this.distributeCard('player');
+			setTimeout(function(){
+				game.distributeCard('player');
+				setTimeout(function(){
+					game.distributeCard('bank');
+					setTimeout(function(){
+						game.distributeCard('bank', true);
+					}, 750);
+				}, 750);
+			}, 750);
 		},
 
 		buildDeck: function(){
