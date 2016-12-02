@@ -47,6 +47,13 @@ for(let i=2; i<11; i++)
 
 cards.push('J', 'Q', 'K', 'A');
 
+const messages = {
+	bet: 'Bet !',
+	win: 'You win !',
+	draw: 'Draw !',
+	lose: 'Dealer wins'
+};
+
 function rand(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }

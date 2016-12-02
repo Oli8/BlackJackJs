@@ -29,12 +29,21 @@ function init(){
 		resetChips: function(){
 			Object.keys(this.dealt).forEach(color => this.dealt[color] = 0);
 		},
-		message: false,
+		message: {
+			text: false,
+			init: function(){
+				this.text = new createjs.Text(messages.bet, '40px Arial', '#fff');
+				this.text.x = 900;
+				this.text.y = 0;
+				stage.addChild(this.text);
+			}
+		},
 
 		start: function(){
 			stage.enableMouseOver(10);
 			createjs.Ticker.addEventListener("tick", tick);
 			createjs.Ticker.setFPS(60);
+			this.message.init();
 			this.buildDeck();
 			this.new();
 			this.addButtons();
@@ -52,6 +61,7 @@ function init(){
 		},
 
 		new: function(){
+			this.message.text.text = messages.bet;
 			bank.cardsContainer.x = player.cardsContainer.x = 450;
 			this.distributeCard('player');
 			setTimeout(function(){
@@ -332,6 +342,7 @@ function init(){
 
 		win: function(){
 			l('win!');
+			game.message.text.text = messages.win;
 			setTimeout(function(){
 				game.end();
 				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
@@ -350,6 +361,7 @@ function init(){
 
 		lose: function(){
 			l('lose');
+			game.message.text.text = messages.lose;
 			setTimeout(function(){
 				game.end();
 				player.dealt = 0;
@@ -361,6 +373,7 @@ function init(){
 
 		draw: function(){
 			l('draw :|');
+			game.message.text.text = messages.draw;
 			setTimeout(function(){
 				game.end();
 				player.funds += player.dealt ;
