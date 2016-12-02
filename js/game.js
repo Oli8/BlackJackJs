@@ -143,7 +143,7 @@ function init(){
 				l('player :' + this.deckValue(player.deck));
 				if(this.deckValue(player.deck) > 21){
 					player.canHit = false;
-					l('you lost');
+					player.lose();
 				}
 			}
 
