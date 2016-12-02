@@ -96,7 +96,7 @@ function init(){
 					total += card.value;
 				if(['J', 'Q', 'K'].includes(card.value))
 					total += 10;
-				if(card.value == 'A')
+				if(card.value === 'A')
 					total += 11; //review later
 			});
 
@@ -232,7 +232,7 @@ function init(){
 		throwChip: function(chip){
 			if(chip.dealt || game.inProgress) return;
 			chip.dealt = true;
-			//remove chip from player.chipsContainer and add it to stage
+			//remove chip from player.chipsContainer and add it to another container
 			player.chipsContainer.removeChildAt(player.chipsContainer.getChildIndex(chip));
 			chip.x = chip.x + player.chipsContainer.x;
 			chip.y = chip.y + player.chipsContainer.y;
