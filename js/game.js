@@ -33,7 +33,7 @@ function init(){
 			text: false,
 			init: function(){
 				this.text = new createjs.Text(messages.bet, '40px Arial', '#fff');
-				this.text.x = 900;
+				this.text.x = 850;
 				this.text.y = 0;
 				stage.addChild(this.text);
 			}
@@ -44,6 +44,7 @@ function init(){
 			createjs.Ticker.addEventListener("tick", tick);
 			createjs.Ticker.setFPS(60);
 			this.message.init();
+			player.fundsText.init();
 			this.buildDeck();
 			this.new();
 			this.addButtons();
@@ -196,7 +197,7 @@ function init(){
 			else
 				player.chipsContainer.removeAllChildren();
 
-			var base = {x: 100, y: 65};
+			var base = {x: 100, y: 45};
 			for(var chip in player.chips){
 				for(let i=0; i<player.chips[chip]; i++){
 					l('add')
@@ -223,7 +224,7 @@ function init(){
 						chipImg.addEventListener('click', event => game.throwChip(event.currentTarget));
 					}
 				}
-				base.y = 65;
+				base.y = 45;
 				base.x += 75;
 			}
 		},
@@ -244,6 +245,7 @@ function init(){
 			player.chips[color] -= 1; //Reduce player chips number
 			//l(player.chips);
 			player.funds -= game.chipsValue[color];
+			player.fundsText.update();
 			l(player.funds);
 			game.dealt[color] += 1;
 			l(game.dealt);
@@ -251,7 +253,6 @@ function init(){
 		},
 
 		check: function(){
-			l('check decks');
 			var bankScore = this.deckValue(bank.deck);
 			var playerScore = this.deckValue(player.deck);
 
@@ -313,7 +314,19 @@ function init(){
 		blackjack: false,
 		canHit: true,
 		funds: 1000,
-		dealt: 0, //null to edit
+		fundsText: {
+			text: false,
+			init: function(){
+				this.text = new createjs.Text(player.funds, '30px Arial', '#fff');
+				this.text.x = 880;
+				this.text.y = 590;
+				stage.addChild(this.text);
+			},
+			update: function(){
+				this.text.text = player.funds;
+			}
+		},
+		dealt: 0,
 		chips: {
 			blue: 1, //500
 			black: 2, //200
@@ -346,6 +359,7 @@ function init(){
 			setTimeout(function(){
 				game.end();
 				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
+				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
 				for(var chip in game.dealt){
@@ -376,7 +390,8 @@ function init(){
 			game.message.text.text = messages.draw;
 			setTimeout(function(){
 				game.end();
-				player.funds += player.dealt ;
+				player.funds += player.dealt;
+				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
 				for(var chip in game.dealt){
