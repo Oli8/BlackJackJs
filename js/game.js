@@ -44,7 +44,6 @@ function init(){
 		end: function(){
 			game.dealtChipContainer.removeAllChildren();
 			game.inProgress = false;
-			//put player and bank cards back to main deck ?
 			player.deck = [];
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
@@ -53,6 +52,7 @@ function init(){
 		},
 
 		new: function(){
+			bank.cardsContainer.x = player.cardsContainer.x = 450;
 			this.distributeCard('player');
 			setTimeout(function(){
 				game.distributeCard('player');
