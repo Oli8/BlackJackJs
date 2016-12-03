@@ -70,11 +70,11 @@ function init(){
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
 			player.cardsContainer.removeAllChildren();
+			this.message.text.text = messages.bet;
 		},
 
 		new: function(){
-			this.buttonContainer.getChildAt(2);
-			this.message.text.text = messages.bet;
+			//this.buttonContainer.getChildAt(2);
 			bank.cardsContainer.x = player.cardsContainer.x = 450;
 			this.distributeCard('player');
 			setTimeout(function(){
