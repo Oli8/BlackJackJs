@@ -56,6 +56,7 @@ function init(){
 			if(player.dealt && !this.inProgress){
 				game.inProgress = true;
 				player.betted = true;
+				this.message.text.text = '';
 				this.new();
 			}
 			else
