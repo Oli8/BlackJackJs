@@ -14,7 +14,9 @@ function init(){
 		},
 		buttons: [
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
-			new Button('Stand', '#fff', 200, 100, () => player.stand())
+			new Button('Stand', '#fff', 200, 100, () => player.stand()),
+			new Button('Go', '#fff', 935, -430, () => game.go()),
+			new Button('Insurance', '#fff', 100, 0, () => l('insurance'))
 		],
 		buttonContainer: false,
 		dealtChipContainer: false,
@@ -46,22 +48,32 @@ function init(){
 			this.message.init();
 			player.fundsText.init();
 			this.buildDeck();
-			this.new();
 			this.addButtons();
 			this.addChips();
+		},
+
+		go: function(){
+			if(player.dealt && !this.inProgress){
+				game.inProgress = true;
+				player.betted = true;
+				this.new();
+			}
+			else
+				l('gotta bet duh')
 		},
 
 		end: function(){
 			game.dealtChipContainer.removeAllChildren();
 			game.inProgress = false;
+			player.betted = false;
 			player.deck = [];
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
 			player.cardsContainer.removeAllChildren();
-			this.new();
 		},
 
 		new: function(){
+			this.buttonContainer.getChildAt(2);
 			this.message.text.text = messages.bet;
 			bank.cardsContainer.x = player.cardsContainer.x = 450;
 			this.distributeCard('player');
@@ -153,7 +165,6 @@ function init(){
 				player.cardsContainer.x -= 20;
 				l('player :' + this.deckValue(player.deck));
 				if(this.deckValue(player.deck) > 21){
-					player.canHit = false;
 					player.lose();
 				}
 			}
@@ -206,7 +217,7 @@ function init(){
 					chipImg.y = base.y;
 					chipImg.color = chip;
 					chipImg.dealt = false;
-					chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+					//chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5);
 					player.chipsContainer.addChild(chipImg);
 					base.y -= 10;
 					if(i === player.chips[chip] - 1){ //add click event on top chip
@@ -312,7 +323,6 @@ function init(){
 		cardsContainer: false,
 		chipsContainer: false,
 		blackjack: false,
-		canHit: true,
 		funds: 1000,
 		fundsText: {
 			text: false,
@@ -326,6 +336,7 @@ function init(){
 				this.text.text = player.funds;
 			}
 		},
+		betted: false,
 		dealt: 0,
 		chips: {
 			blue: 1, //500
@@ -336,7 +347,7 @@ function init(){
 		},
 
 		hit: function(){
-			if(this.dealt){
+			if(this.betted){
 				game.inProgress = true;
 				game.distributeCard('player');
 			}
@@ -346,10 +357,9 @@ function init(){
 
 		stand: function(){
 			l('stand!');
-			if(!this.dealt)
+			if(!this.betted)
 				return l('You need to bet first');
 			game.inProgress = true;
-			this.canHit = false;
 			bank.play();
 		},
 
