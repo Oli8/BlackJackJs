@@ -6,8 +6,8 @@ function init(){
 
 		deck: [],
 		chipsValue: {
-			black: 100,
 			blue: 500,
+			black: 100,
 			green: 25,
 			red: 5,
 			white: 1
@@ -43,6 +43,7 @@ function init(){
 				stage.addChild(this.text);
 			}
 		},
+
 		_alert: function(msg){
 			var alertText = new createjs.Text(msg, '30px Arial', 'orange');
 			alertText.x = 745;
@@ -51,6 +52,29 @@ function init(){
 			createjs.Tween.get(alertText)
 				.wait(1000)
 				.to({alpha: 0}, 1000, createjs.Ease.getPowInOut(1));
+		},
+
+		chipsFromValue: function(value){
+			var chips = {
+				black: 0,
+				blue: 0,
+				green: 0,
+				red: 0,
+				white: 0
+			};
+
+			while(value !== 0){
+				for(let chip in this.chipsValue){
+					//l(chip + ' ' + this.chipsValue[chip])
+					if(value >= this.chipsValue[chip]){
+						let c = Math.floor(value  / this.chipsValue[chip]);
+						value -= c * this.chipsValue[chip];
+						chips[chip] += c;
+					}
+				}
+			}
+
+			return chips;
 		},
 
 		start: function(){
@@ -385,7 +409,7 @@ function init(){
 		insure: function(){
 			l('insure');
 			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
-				this.insurance = true;
+				this.insurance = Math.round(this.funds / 2);
 				l('use Insurance')
 			}
 			else
@@ -417,6 +441,10 @@ function init(){
 			game.message.text.text = messages.lose;
 			setTimeout(function(){
 				game.end();
+				if(player.insurance){
+					player.funds -= player.insurance;
+					//need to withdraw chip
+				}
 				player.dealt = 0;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
