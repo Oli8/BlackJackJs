@@ -16,7 +16,10 @@ function init(){
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
 			new Button('Go', '#fff', 935, -430, () => game.go()),
-			new Button('Insurance', '#fff', 100, 0, () => l('insurance'))
+			new Button('Insurance', '#fff', 100, -80, () => player.insure()),
+			new Button('Split', '#fff', 100, -40, () => l('split')),
+			new Button('Double', '#fff', 100, 0, () => l('double')),
+			new Button('Give up', '#fff', 100, 40, () => l('give up'))
 		],
 		buttonContainer: false,
 		dealtChipContainer: false,
@@ -39,6 +42,15 @@ function init(){
 				this.text.y = 0;
 				stage.addChild(this.text);
 			}
+		},
+		_alert: function(msg){
+			var alertText = new createjs.Text(msg, '30px Arial', 'orange');
+			alertText.x = 745;
+			alertText.y = 120;
+			stage.addChild(alertText);
+			createjs.Tween.get(alertText)
+				.wait(1000)
+				.to({alpha: 0}, 1000, createjs.Ease.getPowInOut(1));
 		},
 
 		start: function(){
@@ -67,6 +79,7 @@ function init(){
 			game.dealtChipContainer.removeAllChildren();
 			game.inProgress = false;
 			player.betted = false;
+			player.insurance = false;
 			player.deck = [];
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
@@ -275,8 +288,12 @@ function init(){
 
 			if(bank.blackjack && player.blackjack)
 				player.draw();
-			else if(bank.blackjack)
-				player.lose();
+			else if(bank.blackjack){
+				if(player.insurance)
+					player.draw();
+				else
+					player.lose();
+			}
 			else if(player.blackjack)
 				player.win();
 
@@ -324,6 +341,7 @@ function init(){
 		cardsContainer: false,
 		chipsContainer: false,
 		blackjack: false,
+		insurance: false,
 		funds: 1000,
 		fundsText: {
 			text: false,
@@ -353,15 +371,25 @@ function init(){
 				game.distributeCard('player');
 			}
 			else
-				l('You need to bet first');
+				game._alert(messages.warning.bet);
 		},
 
 		stand: function(){
 			l('stand!');
 			if(!this.betted)
-				return l('You need to bet first');
+				return game._alert(messages.warning.bet);
 			game.inProgress = true;
 			bank.play();
+		},
+
+		insure: function(){
+			l('insure');
+			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
+				this.insurance = true;
+				l('use Insurance')
+			}
+			else
+				game._alert(messages.warning.insurance);
 		},
 
 		win: function(){

@@ -51,7 +51,11 @@ const messages = {
 	bet: 'Bet !',
 	win: 'You win !',
 	draw: 'Draw !',
-	lose: 'Dealer wins'
+	lose: 'Dealer wins',
+	warning: {
+		bet: 'You need to bet first',
+		insurance: 'You can not use insurance'
+	},
 };
 
 function rand(min, max){
