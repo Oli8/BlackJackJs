@@ -53,9 +53,10 @@ const messages = {
 	draw: 'Draw !',
 	lose: 'Dealer wins',
 	warning: {
-		bet: 'You need to bet first',
-		insurance: 'You can not use insurance',
-		double: 'You cannot double now'
+		bet: {msg: 'You need to bet first', x: 750},
+		insurance: {msg: 'You can not use insurance', x: 725},
+		double: {msg: 'You can not double now', x: 725},
+		funds: {msg: "You haven't got enough funds", x: 680}
 	},
 };
 

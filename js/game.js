@@ -44,9 +44,9 @@ function init(){
 			}
 		},
 
-		_alert: function(msg){
+		_alert: function(msg, x = 745){
 			var alertText = new createjs.Text(msg, '30px Arial', 'orange');
-			alertText.x = 745;
+			alertText.x = x;
 			alertText.y = 120;
 			stage.addChild(alertText);
 			createjs.Tween.get(alertText)
@@ -96,7 +96,7 @@ function init(){
 				this.new();
 			}
 			else if(!player.dealt)
-				game._alert(messages.warning.bet);
+				game._alert(messages.warning.bet.msg, messages.warning.bet.x);
 		},
 
 		end: function(){
@@ -234,7 +234,6 @@ function init(){
 		},
 
 		addChips: function(){
-			l('add chips');
 			if(!player.chipsContainer){
 				player.chipsContainer = new createjs.Container();
 				player.chipsContainer.x = 600;
@@ -249,7 +248,6 @@ function init(){
 			var base = {x: 100, y: 45};
 			for(var chip in player.chips){
 				for(let i=0; i<player.chips[chip]; i++){
-					l('add')
 					var chipImg = new createjs.Bitmap(imgs.chips.get(chip, 'side'));
 					chipImg.x = base.x;
 					chipImg.y = base.y;
@@ -366,7 +364,7 @@ function init(){
 		chipsContainer: false,
 		blackjack: false,
 		insurance: false,
-		double: false,
+		doubled: false,
 		funds: 1000,
 		fundsText: {
 			text: false,
@@ -392,19 +390,18 @@ function init(){
 
 		hit: function(){
 			if(this.betted){
-				if(this.double && this.deck.length !== 2)
+				if(this.doubled && this.deck.length !== 2)
 					return game._alert('You can not hit anymore')
-				game.inProgress = true;
 				game.distributeCard('player');
 			}
 			else
-				game._alert(messages.warning.bet);
+				game._alert(messages.warning.bet.msg, messages.warning.bet.x);
 		},
 
 		stand: function(){
 			l('stand!');
 			if(!this.betted)
-				return game._alert(messages.warning.bet);
+				return game._alert(messages.warning.bet.msg, messages.warning.bet.x);
 			game.inProgress = true;
 			bank.play();
 		},
@@ -416,16 +413,20 @@ function init(){
 				l('use Insurance')
 			}
 			else
-				game._alert(messages.warning.insurance);
+				game._alert(messages.warning.insurance.msg, messages.warning.insurance.x);
 		},
 
 		double: function(){
 			if(game.inProgress && this.deck.length === 2){
 				l('double');
-				this.double = true;
+				if(this.funds >= this.dealt){
+					this.doubled = true;
+				}
+				else
+					game._alert(messages.warning.funds.msg, messages.warning.funds.x)
 			}
 			else{
-				game._alert(messages.warning.double);
+				game._alert(messages.warning.double.msg, messages.warning.double.x);
 			}
 		},
 
