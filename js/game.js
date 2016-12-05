@@ -387,7 +387,7 @@ function init(){
 			black: 2, //200
 			green: 8, // 200
 			red: 15, // 75
-			white: 15 //15
+			white: 25 //25
 		},
 
 		hit: function(){
