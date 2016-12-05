@@ -54,7 +54,8 @@ const messages = {
 	lose: 'Dealer wins',
 	warning: {
 		bet: 'You need to bet first',
-		insurance: 'You can not use insurance'
+		insurance: 'You can not use insurance',
+		double: 'You cannot double now'
 	},
 };
 

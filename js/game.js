@@ -18,7 +18,7 @@ function init(){
 			new Button('Go', '#fff', 935, -430, () => game.go()),
 			new Button('Insurance', '#fff', 100, -80, () => player.insure()),
 			new Button('Split', '#fff', 100, -40, () => l('split')),
-			new Button('Double', '#fff', 100, 0, () => l('double')),
+			new Button('Double', '#fff', 100, 0, () => player.double()),
 			new Button('Give up', '#fff', 100, 40, () => l('give up'))
 		],
 		buttonContainer: false,
@@ -95,8 +95,8 @@ function init(){
 				this.message.text.text = '';
 				this.new();
 			}
-			else
-				l('gotta bet duh')
+			else if(!player.dealt)
+				game._alert(messages.warning.bet);
 		},
 
 		end: function(){
@@ -366,6 +366,7 @@ function init(){
 		chipsContainer: false,
 		blackjack: false,
 		insurance: false,
+		double: false,
 		funds: 1000,
 		fundsText: {
 			text: false,
@@ -391,6 +392,8 @@ function init(){
 
 		hit: function(){
 			if(this.betted){
+				if(this.double && this.deck.length !== 2)
+					return game._alert('You can not hit anymore')
 				game.inProgress = true;
 				game.distributeCard('player');
 			}
@@ -414,6 +417,16 @@ function init(){
 			}
 			else
 				game._alert(messages.warning.insurance);
+		},
+
+		double: function(){
+			if(game.inProgress && this.deck.length === 2){
+				l('double');
+				this.double = true;
+			}
+			else{
+				game._alert(messages.warning.double);
+			}
 		},
 
 		win: function(){
