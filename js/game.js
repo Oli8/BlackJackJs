@@ -44,9 +44,9 @@ function init(){
 			}
 		},
 
-		_alert: function(msg, x = 745){
-			var alertText = new createjs.Text(msg, '30px Arial', 'orange');
-			alertText.x = x;
+		_alert: function(msg){
+			var alertText = new createjs.Text(msg.msg, '30px Arial', 'orange');
+			alertText.x = msg.x || 745;
 			alertText.y = 120;
 			stage.addChild(alertText);
 			createjs.Tween.get(alertText)
@@ -96,7 +96,7 @@ function init(){
 				this.new();
 			}
 			else if(!player.dealt)
-				game._alert(messages.warning.bet.msg, messages.warning.bet.x);
+				game._alert(messages.warning.bet);
 		},
 
 		end: function(){
@@ -391,17 +391,17 @@ function init(){
 		hit: function(){
 			if(this.betted){
 				if(this.doubled && this.deck.length !== 2)
-					return game._alert('You can not hit anymore')
+					return game._alert(messages.warning.hit)
 				game.distributeCard('player');
 			}
 			else
-				game._alert(messages.warning.bet.msg, messages.warning.bet.x);
+				game._alert(messages.warning.bet);
 		},
 
 		stand: function(){
 			l('stand!');
 			if(!this.betted)
-				return game._alert(messages.warning.bet.msg, messages.warning.bet.x);
+				return game._alert(messages.warning.bet);
 			game.inProgress = true;
 			bank.play();
 		},
@@ -413,7 +413,7 @@ function init(){
 				l('use Insurance')
 			}
 			else
-				game._alert(messages.warning.insurance.msg, messages.warning.insurance.x);
+				game._alert(messages.warning.insurance);
 		},
 
 		double: function(){
@@ -423,10 +423,10 @@ function init(){
 					this.doubled = true;
 				}
 				else
-					game._alert(messages.warning.funds.msg, messages.warning.funds.x)
+					game._alert(messages.warning.funds)
 			}
 			else{
-				game._alert(messages.warning.double.msg, messages.warning.double.x);
+				game._alert(messages.warning.double);
 			}
 		},
 

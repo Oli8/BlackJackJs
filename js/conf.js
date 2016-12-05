@@ -56,7 +56,8 @@ const messages = {
 		bet: {msg: 'You need to bet first', x: 750},
 		insurance: {msg: 'You can not use insurance', x: 725},
 		double: {msg: 'You can not double now', x: 725},
-		funds: {msg: "You haven't got enough funds", x: 680}
+		funds: {msg: "You haven't got enough funds", x: 680},
+		hit: {msg: 'You can not hit anymore', x: 720}
 	},
 };
 
