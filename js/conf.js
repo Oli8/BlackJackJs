@@ -41,11 +41,11 @@ const imgs = {
 
 const deckNumber = 6;
 const suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
-var cards = [];
-for(let i=2; i<11; i++)
-	cards.push(i);
+// var cards = [];
+// for(let i=2; i<11; i++)
+// 	cards.push(i);
 
-cards.push('J', 'Q', 'K', 'A');
+// cards.push('J', 'Q', 'K', 'A');
 
 const messages = {
 	bet: 'Bet !',
@@ -57,7 +57,8 @@ const messages = {
 		insurance: {msg: 'You can not use insurance', x: 725},
 		double: {msg: 'You can not double now', x: 725},
 		funds: {msg: "You haven't got enough funds", x: 680},
-		hit: {msg: 'You can not hit anymore', x: 720}
+		hit: {msg: 'You can not hit anymore', x: 720},
+		doubled: {msg: 'Bet doubled !', x: 800}
 	},
 };
 

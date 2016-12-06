@@ -65,7 +65,6 @@ function init(){
 
 			while(value !== 0){
 				for(let chip in this.chipsValue){
-					//l(chip + ' ' + this.chipsValue[chip])
 					if(value >= this.chipsValue[chip]){
 						let c = Math.floor(value  / this.chipsValue[chip]);
 						value -= c * this.chipsValue[chip];
@@ -159,9 +158,9 @@ function init(){
 			if(hidden) card.hidden = true;
 
 			if(to == 'bank')
-				bank.deck.push(card)
+				bank.deck.push(card);
 			else if(to == 'player')
-				player.deck.push(card)
+				player.deck.push(card);
 
 			this.deck.splice(index, 1);
 			this.displayCard(card, to);
@@ -339,6 +338,9 @@ function init(){
 
 		play: function(){
 			l('bank turn to play :D');
+			if(player.doubled)
+				player.cardsContainer.children[2].image.src = imgs.cards.get(player.deck[2].suit, player.deck[2].value);
+
 			if(this.deck.length === 2)
 				this.cardsContainer.children[1].image.src = imgs.cards.get(this.deck[1].suit, this.deck[1].value);
 
@@ -392,6 +394,8 @@ function init(){
 			if(this.betted){
 				if(this.doubled && this.deck.length !== 2)
 					return game._alert(messages.warning.hit)
+				else
+					return game.distributeCard('player', true);
 				game.distributeCard('player');
 			}
 			else
@@ -417,17 +421,23 @@ function init(){
 		},
 
 		double: function(){
-			if(game.inProgress && this.deck.length === 2){
+			if(game.inProgress && this.deck.length === 2 && !this.doubled){
 				l('double');
 				if(this.funds >= this.dealt){
+					game._alert(messages.warning.doubled);
 					this.doubled = true;
+					this.dealt *= 2;
+					l(game.dealt);
+					for(var chip in game.dealt)
+						if(game.dealt[chip])
+							game.dealt[chip] *= 2;
+					l(game.dealt);
 				}
 				else
 					game._alert(messages.warning.funds)
 			}
-			else{
+			else
 				game._alert(messages.warning.double);
-			}
 		},
 
 		win: function(){
