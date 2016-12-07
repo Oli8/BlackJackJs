@@ -5,6 +5,7 @@ function init(){
 	var game = {
 
 		deck: [],
+		startContainer: false,
 		chipsValue: {
 			blue: 500,
 			black: 100,
@@ -56,8 +57,8 @@ function init(){
 
 		chipsFromValue: function(value){
 			var chips = {
-				black: 0,
 				blue: 0,
+				black: 0,
 				green: 0,
 				red: 0,
 				white: 0
@@ -74,6 +75,12 @@ function init(){
 			}
 
 			return chips;
+		},
+
+		startScreen: function(){
+			var titleText = new createjs.Text('BlackJackJs', '40px Arial', '#fff');
+			titleText.x = 100;
+			titleText.y = 100;
 		},
 
 		start: function(){
@@ -103,6 +110,7 @@ function init(){
 			game.inProgress = false;
 			player.betted = false;
 			player.insurance = false;
+			player.doubled = false;
 			player.deck = [];
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
@@ -157,9 +165,9 @@ function init(){
 			var card = this.deck[index];
 			if(hidden) card.hidden = true;
 
-			if(to == 'bank')
+			if(to === 'bank')
 				bank.deck.push(card);
-			else if(to == 'player')
+			else if(to === 'player')
 				player.deck.push(card);
 
 			this.deck.splice(index, 1);
@@ -338,7 +346,7 @@ function init(){
 
 		play: function(){
 			l('bank turn to play :D');
-			if(player.doubled)
+			if(player.doubled && player.deck.length > 2)
 				player.cardsContainer.children[2].image.src = imgs.cards.get(player.deck[2].suit, player.deck[2].value);
 
 			if(this.deck.length === 2)
@@ -394,7 +402,7 @@ function init(){
 			if(this.betted){
 				if(this.doubled && this.deck.length !== 2)
 					return game._alert(messages.warning.hit)
-				else
+				else if(this.doubled)
 					return game.distributeCard('player', true);
 				game.distributeCard('player');
 			}
@@ -426,12 +434,27 @@ function init(){
 				if(this.funds >= this.dealt){
 					game._alert(messages.warning.doubled);
 					this.doubled = true;
+					this.funds -= this.dealt;
 					this.dealt *= 2;
+					player.chips = game.chipsFromValue(this.funds);
+					game.addChips();
 					l(game.dealt);
+					for(var chip in game.dealt){
+						//update graphic dealtcontainer
+						for(let i=0; i<game.dealt[chip]; i++){
+							var chipImg = new createjs.Bitmap(imgs.chips.get(chip, 'side'));
+							chipImg.x = rand(350, 675);
+							chipImg.y = rand(190, 350);
+							chipImg.color = chip;
+							chipImg.dealt = true;
+							game.dealtChipContainer.addChild(chipImg);
+						}
+					}
 					for(var chip in game.dealt)
 						if(game.dealt[chip])
 							game.dealt[chip] *= 2;
 					l(game.dealt);
+					player.fundsText.update();
 				}
 				else
 					game._alert(messages.warning.funds)
@@ -450,8 +473,10 @@ function init(){
 				player.dealt = 0;
 				//get Chips
 				for(var chip in game.dealt){
-					l([chip, game.dealt[chip]].join(' '))
-					player.chips[chip] += player.blackjack ? game.dealt[chip] * 3 : game.dealt[chip] * 2;
+					if(player.blackjack)
+						player.chips[chip] += game.dealt[chip] * 3;
+					else
+						player.chips[chip] += game.dealt[chip] * 2;
 				}
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
@@ -461,7 +486,12 @@ function init(){
 		},
 
 		lose: function(){
+			//when doubled
 			l('lose');
+			if(this.funds <= 0){
+				game.message.text.text = messages.gameOver;
+				//flush container
+			}
 			game.message.text.text = messages.lose;
 			setTimeout(function(){
 				game.end();

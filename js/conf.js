@@ -41,17 +41,13 @@ const imgs = {
 
 const deckNumber = 6;
 const suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
-// var cards = [];
-// for(let i=2; i<11; i++)
-// 	cards.push(i);
-
-// cards.push('J', 'Q', 'K', 'A');
 
 const messages = {
 	bet: 'Bet !',
 	win: 'You win !',
 	draw: 'Draw !',
 	lose: 'Dealer wins',
+	gameOver: 'Game Over',
 	warning: {
 		bet: {msg: 'You need to bet first', x: 750},
 		insurance: {msg: 'You can not use insurance', x: 725},
@@ -65,7 +61,6 @@ const messages = {
 function rand(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 
 function l(v){
 	console.log(v);
