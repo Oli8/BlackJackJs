@@ -47,7 +47,6 @@ const messages = {
 	win: 'You win !',
 	draw: 'Draw !',
 	lose: 'Dealer wins',
-	gameOver: 'Game Over',
 	warning: {
 		bet: {msg: 'You need to bet first', x: 750},
 		insurance: {msg: 'You can not use insurance', x: 725},
@@ -56,6 +55,15 @@ const messages = {
 		hit: {msg: 'You can not hit anymore', x: 720},
 		doubled: {msg: 'Bet doubled !', x: 800}
 	},
+};
+
+const width = 1100;
+const height = 650;
+
+createjs.Text.prototype.center = function(x = true, y = false){
+	var bounds = this.getBounds();
+	if(x) this.x = (width / 2) - (bounds.width / 2);
+	if(y) this.y = (height / 2) - (bounds.height / 2);
 };
 
 function rand(min, max){

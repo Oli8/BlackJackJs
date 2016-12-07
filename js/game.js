@@ -55,6 +55,26 @@ function init(){
 				.to({alpha: 0}, 1000, createjs.Ease.getPowInOut(1));
 		},
 
+		over: function(){
+			stage.removeAllChildren();
+			var gameOverText = new createjs.Text('Game Over', '50px Arial', '#fff');
+			gameOverText.center(1, 1);
+			var replayText = new createjs.Text('Replay', '30px Arial', '#fff');
+			replayText.center(1);
+			replayText.y = 400;
+			var hit = new createjs.Shape();
+			hit.graphics.beginFill("#000").drawRect(0, 0, replayText.getMeasuredWidth(), replayText.getMeasuredHeight());
+			replayText.hitArea = hit;
+			replayText.alpha = 0.7;
+			replayText.cursor = 'Pointer';
+			replayText.on('mouseover', function(event){
+				replayText.alpha = 1;
+			});
+			replayText.on('mouseout', event => replayText.alpha = 0.7);
+			replayText.addEventListener('click', () => location.reload());
+			stage.addChild(gameOverText, replayText);
+		},
+
 		chipsFromValue: function(value){
 			var chips = {
 				blue: 0,
@@ -486,14 +506,12 @@ function init(){
 		},
 
 		lose: function(){
-			//when doubled
 			l('lose');
-			if(this.funds <= 0){
-				game.message.text.text = messages.gameOver;
-				//flush container
-			}
+
 			game.message.text.text = messages.lose;
 			setTimeout(function(){
+				if(player.funds <= 0)
+					return game.over();
 				game.end();
 				if(player.insurance){
 					player.funds -= player.insurance;
