@@ -20,7 +20,8 @@ function init(){
 			new Button('Insurance', '#fff', 100, -80, () => player.insure()),
 			new Button('Split', '#fff', 100, -40, () => l('split')),
 			new Button('Double', '#fff', 100, 0, () => player.double()),
-			new Button('Give up', '#fff', 100, 40, () => l('give up'))
+			new Button('Give up', '#fff', 100, 40, () => l('give up')),
+			new Button('New game', '#fff', 100, -490, () => game.reset())
 		],
 		buttonContainer: false,
 		dealtChipContainer: false,
@@ -53,6 +54,13 @@ function init(){
 			createjs.Tween.get(alertText)
 				.wait(1000)
 				.to({alpha: 0}, 1000, createjs.Ease.getPowInOut(1));
+		},
+
+		reset: function(){
+			localStorage.removeItem('BlackJackJs-userName');
+			localStorage.removeItem('BlackJackJs-chips');
+			localStorage.removeItem('BlackJackJs-funds');
+			location.reload();
 		},
 
 		over: function(){
@@ -103,6 +111,8 @@ function init(){
 			createjs.Ticker.setFPS(60);
 			if(localStorage.getItem('BlackJackJs-userName')){
 				player.name.value = localStorage.getItem('BlackJackJs-userName');
+				player.funds = localStorage.getItem('BlackJackJs-funds');
+				player.chips = JSON.parse(localStorage.getItem('BlackJackJs-chips'));
 				this.start();
 			}
 			else{
@@ -124,6 +134,8 @@ function init(){
 				submitText.addEventListener('click', function(event){
 					player.name.value = nameInput._visiblePreCursorText.text || 'Player 1';
 					localStorage.setItem('BlackJackJs-userName', player.name.value);
+					localStorage.setItem('BlackJackJs-funds', '1000');
+					localStorage.setItem('BlackJackJs-chips', JSON.stringify({black: 0, blue: 0, green: 0, red: 0, white: 0}));
 					game.start();
 				});
 				this.startContainer.addChild(titleText, nameInput, submitText);
@@ -490,7 +502,8 @@ function init(){
 					this.doubled = true;
 					this.funds -= this.dealt;
 					this.dealt *= 2;
-					player.chips = game.chipsFromValue(this.funds);
+					this.chips = game.chipsFromValue(this.funds);
+					this.store();
 					game.addChips();
 					l(game.dealt);
 					for(var chip in game.dealt){
@@ -535,6 +548,7 @@ function init(){
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
+				player.store();
 				l(player.chips);
 			}, 2000);
 		},
@@ -554,6 +568,7 @@ function init(){
 				player.dealt = 0;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
+				player.store();
 				l(player.chips);
 			}, 2000);
 		},
@@ -574,9 +589,15 @@ function init(){
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
+				player.store();
 				l(player.chips);
 			}, 2000);
-		}
+		},
+
+		store: function(){
+			localStorage.setItem('BlackJackJs-funds', this.funds);
+			localStorage.setItem('BlackJackJs-chips', JSON.stringify(this.chips));
+		},
 
 	};
 
