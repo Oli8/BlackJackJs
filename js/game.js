@@ -5,7 +5,6 @@ function init(){
 	var game = {
 
 		deck: [],
-		startContainer: false,
 		chipsValue: {
 			blue: 500,
 			black: 100,
@@ -13,6 +12,7 @@ function init(){
 			red: 5,
 			white: 1
 		},
+		startContainer: false,
 		buttons: [
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
@@ -98,15 +98,46 @@ function init(){
 		},
 
 		startScreen: function(){
-			var titleText = new createjs.Text('BlackJackJs', '40px Arial', '#fff');
-			titleText.x = 100;
-			titleText.y = 100;
+			stage.enableMouseOver(10);
+			createjs.Ticker.addEventListener('tick', tick);
+			createjs.Ticker.setFPS(60);
+			if(localStorage.getItem('BlackJackJs-userName')){
+				player.name.value = localStorage.getItem('BlackJackJs-userName');
+				this.start();
+			}
+			else{
+				this.startContainer = new createjs.Container();
+				var titleText = new createjs.Text('BlackJackJs', '60px Arial', '#fff');
+				titleText.center(1, 1);
+				var nameInput = new TextInput();
+				nameInput.x = 430;
+				nameInput.y = 400;
+				nameInput._visiblePostCursorText.text = 'Your name';
+
+				var submitText = new createjs.Text('OK', '30px Arial', '#fff');
+				submitText.x = 640;
+				submitText.y = 403;
+				submitText.cursor = 'Pointer';
+				var hit = new createjs.Shape();
+				hit.graphics.beginFill('#000').drawRect(0, 0, submitText.getMeasuredWidth(), submitText.getMeasuredHeight());
+				submitText.hitArea = hit;
+				submitText.addEventListener('click', function(event){
+					player.name.value = nameInput._visiblePreCursorText.text || 'Player 1';
+					localStorage.setItem('BlackJackJs-userName', player.name.value);
+					game.start();
+				});
+				this.startContainer.addChild(titleText, nameInput, submitText);
+				stage.addChild(this.startContainer);
+			}
 		},
 
 		start: function(){
-			stage.enableMouseOver(10);
-			createjs.Ticker.addEventListener("tick", tick);
-			createjs.Ticker.setFPS(60);
+			player.name.text = new createjs.Text(player.name.value, '30px Arial', '#fff');
+			player.name.text.center();
+			player.name.text.y = 600;
+			stage.addChild(player.name.text);
+			if(this.startContainer)
+				this.startContainer.removeAllChildren();
 			this.message.init();
 			player.fundsText.init();
 			this.buildDeck();
@@ -139,7 +170,6 @@ function init(){
 		},
 
 		new: function(){
-			//this.buttonContainer.getChildAt(2);
 			bank.cardsContainer.x = player.cardsContainer.x = 450;
 			this.distributeCard('player');
 			setTimeout(function(){
@@ -219,7 +249,7 @@ function init(){
 				bank.cardsContainer.x -= 20;
 				l('bank: ' + this.deckValue(bank.deck));
 			}
-			else if(owner === 'player' ){
+			else if(owner === 'player'){
 				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var playerCard = new createjs.Bitmap(cardSrc);
 				playerCard.x = 100;
@@ -390,6 +420,10 @@ function init(){
 	var player = {
 
 		deck: [],
+		name: {
+			value: 'Player 1',
+			text: false,
+		},
 		cardsContainer: false,
 		chipsContainer: false,
 		blackjack: false,
@@ -550,6 +584,6 @@ function init(){
 		stage.update();
 	}
 
-	game.start();
+	game.startScreen();
 
 }
