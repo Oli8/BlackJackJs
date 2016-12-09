@@ -224,7 +224,7 @@ function init(){
 			return total;
 		},
 
-		distributeCard(to, hidden = false){
+		distributeCard: function(to, hidden = false){
 			var index = rand(0, this.deck.length - 1);
 			var card = this.deck[index];
 			if(hidden) card.hidden = true;
@@ -259,7 +259,7 @@ function init(){
 				bankCard.y = -100;
 				bank.cardsContainer.addChild(bankCard);
 				createjs.Tween.get(bankCard)
-					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
+					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1));
 				bank.cardsContainer.x -= 20;
 			}
 			else if(owner === 'player'){
@@ -269,7 +269,7 @@ function init(){
 				playerCard.y = -400;
 				player.cardsContainer.addChild(playerCard);
 				createjs.Tween.get(playerCard)
-					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
+					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1));
 				player.cardsContainer.x -= 20;
 				if(this.deckValue(player.deck) > 21){
 					player.lose();
@@ -299,7 +299,7 @@ function init(){
 				button.on('mouseout', event => button.alpha = 0.7);
 				button.addEventListener('click', b.onclick);
 				game.buttonContainer.addChild(button);
-			})
+			});
 		},
 
 		addChips: function(){
@@ -451,7 +451,7 @@ function init(){
 		hit: function(){
 			if(this.betted){
 				if(this.doubled && this.deck.length !== 2)
-					return game._alert(messages.warning.hit)
+					return game._alert(messages.warning.hit);
 				else if(this.doubled)
 					return game.distributeCard('player', true);
 				game.distributeCard('player');
@@ -473,7 +473,7 @@ function init(){
 				this.funds -= this.insurance;
 				this.chips = game.balanceChips(this.funds);
 				this.fundsText.update();
-				game._alert(messages.warning.insured)
+				game._alert(messages.warning.insured);
 			}
 			else
 				game._alert(messages.warning.insurance);
@@ -506,7 +506,7 @@ function init(){
 					player.fundsText.update();
 				}
 				else
-					game._alert(messages.warning.funds)
+					game._alert(messages.warning.funds);
 			}
 			else
 				game._alert(messages.warning.double);
