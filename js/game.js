@@ -216,7 +216,7 @@ function init(){
 				if(['J', 'Q', 'K'].includes(card.value))
 					total += 10;
 				if(card.value === 'A')
-					total += 11; //review later
+					total += 11;
 			});
 
 			return total;
@@ -379,12 +379,8 @@ function init(){
 
 			if(bank.blackjack && player.blackjack)
 				player.draw();
-			else if(bank.blackjack){
-				if(player.insurance)
-					player.draw();
-				else
-					player.lose();
-			}
+			else if(bank.blackjack)
+				player.lose();
 			else if(player.blackjack)
 				player.win();
 
@@ -487,8 +483,12 @@ function init(){
 		insure: function(){
 			l('insure');
 			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
-				this.insurance = Math.round(this.funds / 2);
-				l('use Insurance')
+				this.insurance = Math.round(this.dealt / 2);
+				this.funds -= this.insurance;
+				this.chips = game.chipsFromValue(this.funds);
+				this.fundsText.update();
+				game._alert(messages.warning.insured)
+				l('use Insurance');
 			}
 			else
 				game._alert(messages.warning.insurance);
@@ -558,13 +558,14 @@ function init(){
 
 			game.message.text.text = messages.lose;
 			setTimeout(function(){
+				if(bank.blackjack && player.insurance){
+					player.funds += player.insurance * 2;
+					player.chips = game.chipsFromValue(player.funds);
+					player.fundsText.update();
+				}
 				if(player.funds <= 0)
 					return game.over();
 				game.end();
-				if(player.insurance){
-					player.funds -= player.insurance;
-					//need to withdraw chip
-				}
 				player.dealt = 0;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
@@ -577,6 +578,11 @@ function init(){
 			l('draw :|');
 			game.message.text.text = messages.draw;
 			setTimeout(function(){
+				if(bank.blackjack && player.insurance){
+					player.funds += player.insurance * 2;
+					player.chips = game.chipsFromValue(player.funds);
+					player.fundsText.update();
+				}
 				game.end();
 				player.funds += player.dealt;
 				player.fundsText.update();
