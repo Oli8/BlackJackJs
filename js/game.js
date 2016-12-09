@@ -18,9 +18,9 @@ function init(){
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
 			new Button('Go', '#fff', 935, -430, () => game.go()),
 			new Button('Insurance', '#fff', 100, -80, () => player.insure()),
-			new Button('Split', '#fff', 100, -40, () => l('split')),
-			new Button('Double', '#fff', 100, 0, () => player.double()),
-			new Button('Give up', '#fff', 100, 40, () => l('give up')),
+			//new Button('Split', '#fff', 100, -40, () => l('split')),
+			new Button('Double', '#fff', 100, -40, () => player.double()),
+			new Button('Give up', '#fff', 100, 0, () => player.giveUp()),
 			new Button('New game', '#fff', 100, -490, () => game.reset())
 		],
 		buttonContainer: false,
@@ -138,7 +138,7 @@ function init(){
 					player.name.value = nameInput._visiblePreCursorText.text || 'Player 1';
 					localStorage.setItem('BlackJackJs-userName', player.name.value);
 					localStorage.setItem('BlackJackJs-funds', '1000');
-					localStorage.setItem('BlackJackJs-chips', JSON.stringify({black: 0, blue: 0, green: 0, red: 0, white: 0}));
+					localStorage.setItem('BlackJackJs-chips', JSON.stringify(player.chips));
 					game.start();
 				});
 				this.startContainer.addChild(titleText, nameInput, submitText);
@@ -531,6 +531,20 @@ function init(){
 			}
 			else
 				game._alert(messages.warning.double);
+		},
+
+		giveUp: function(){
+			if(game.inProgress && this.deck.length === 2 && bank.deck.length === 2){
+				game._alert(messages.warning.gaveUp);
+				this.funds += Math.round(this.dealt / 2);
+				this.chips = game.chipsFromValue(this.funds);
+				this.fundsText.update();
+				player.store();
+				game.addChips();
+				game.end();
+			}
+			else
+				game._alert(messages.warning.giveUp);
 		},
 
 		win: function(){

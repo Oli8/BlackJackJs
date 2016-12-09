@@ -54,7 +54,9 @@ const messages = {
 		double: {msg: 'You can not double now', x: 725},
 		funds: {msg: "You haven't got enough funds", x: 680},
 		hit: {msg: 'You can not hit anymore', x: 720},
-		doubled: {msg: 'Bet doubled !', x: 800}
+		doubled: {msg: 'Bet doubled !', x: 800},
+		giveUp: {msg: 'You can not give up now !', x: 720},
+		gaveUp: {msg: 'You gave up', x: 800}
 	},
 };
 
