@@ -64,6 +64,9 @@ function init(){
 		},
 
 		over: function(){
+			localStorage.removeItem('BlackJackJs-userName');
+			localStorage.removeItem('BlackJackJs-chips');
+			localStorage.removeItem('BlackJackJs-funds');
 			stage.removeAllChildren();
 			var gameOverText = new createjs.Text('Game Over', '50px Arial', '#fff');
 			gameOverText.center(1, 1);
