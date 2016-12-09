@@ -27,8 +27,8 @@ function init(){
 		dealtChipContainer: false,
 		inProgress: false,
 		dealt: {
-			black: 0,
 			blue: 0,
+			black: 0,
 			green: 0,
 			red: 0,
 			white: 0
@@ -86,7 +86,7 @@ function init(){
 			stage.addChild(gameOverText, replayText);
 		},
 
-		chipsFromValue: function(value){
+		balanceChips: function(value){
 			var chips = {
 				blue: 0,
 				black: 0,
@@ -96,13 +96,12 @@ function init(){
 			};
 
 			while(value !== 0){
-				for(let chip in this.chipsValue){
-					if(value >= this.chipsValue[chip]){
-						let c = Math.floor(value  / this.chipsValue[chip]);
-						value -= c * this.chipsValue[chip];
-						chips[chip] += c;
+				Object.keys(chips).reverse().forEach(function(chip){
+					if(value >= game.chipsValue[chip]){
+						value -= game.chipsValue[chip];
+						chips[chip]++;
 					}
-				}
+				});
 			}
 
 			return chips;
@@ -455,13 +454,7 @@ function init(){
 		},
 		betted: false,
 		dealt: 0,
-		chips: {
-			blue: 1, //500
-			black: 2, //200
-			green: 8, // 200
-			red: 15, // 75
-			white: 25 //25
-		},
+		chips: game.balanceChips(1000),
 
 		hit: function(){
 			if(this.betted){
@@ -488,7 +481,7 @@ function init(){
 			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
 				this.insurance = Math.round(this.dealt / 2);
 				this.funds -= this.insurance;
-				this.chips = game.chipsFromValue(this.funds);
+				this.chips = game.balanceChips(this.funds);
 				this.fundsText.update();
 				game._alert(messages.warning.insured)
 				l('use Insurance');
@@ -505,7 +498,7 @@ function init(){
 					this.doubled = true;
 					this.funds -= this.dealt;
 					this.dealt *= 2;
-					this.chips = game.chipsFromValue(this.funds);
+					this.chips = game.balanceChips(this.funds);
 					this.store();
 					game.addChips();
 					l(game.dealt);
@@ -537,7 +530,7 @@ function init(){
 			if(game.inProgress && this.deck.length === 2 && bank.deck.length === 2){
 				game._alert(messages.warning.gaveUp);
 				this.funds += Math.round(this.dealt / 2);
-				this.chips = game.chipsFromValue(this.funds);
+				this.chips = game.balanceChips(this.funds);
 				this.fundsText.update();
 				player.store();
 				game.addChips();
@@ -556,7 +549,7 @@ function init(){
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
-				player.chips = game.chipsFromValue(this.funds);
+				player.chips = game.balanceChips(player.funds);
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
@@ -572,7 +565,7 @@ function init(){
 			setTimeout(function(){
 				if(bank.blackjack && player.insurance){
 					player.funds += player.insurance * 2;
-					player.chips = game.chipsFromValue(player.funds);
+					player.chips = game.balanceChips(player.funds);
 					player.fundsText.update();
 				}
 				if(player.funds <= 0)
@@ -592,7 +585,7 @@ function init(){
 			setTimeout(function(){
 				if(bank.blackjack && player.insurance){
 					player.funds += player.insurance * 2;
-					player.chips = game.chipsFromValue(player.funds);
+					player.chips = game.balanceChips(player.funds);
 					player.fundsText.update();
 				}
 				game.end();
@@ -600,7 +593,7 @@ function init(){
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
-				player.chips = game.chipsFromValue(this.funds);
+				player.chips = game.balanceChips(this.funds);
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
