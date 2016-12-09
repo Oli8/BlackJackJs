@@ -271,9 +271,8 @@ function init(){
 				createjs.Tween.get(playerCard)
 					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1));
 				player.cardsContainer.x -= 20;
-				if(this.deckValue(player.deck) > 21){
+				if(this.deckValue(player.deck) > 21 && !player.doubled)
 					player.lose();
-				}
 			}
 
 		},
@@ -544,6 +543,8 @@ function init(){
 
 		lose: function(){
 			game.message.text.text = messages.lose;
+			if(this.doubled && this.deck.length === 3)
+				this.cardsContainer.children[2].image.src = imgs.cards.get(this.deck[2].suit, this.deck[2].value);
 			setTimeout(function(){
 				if(bank.blackjack && player.insurance){
 					player.funds += player.insurance * 2;
