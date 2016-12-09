@@ -556,12 +556,7 @@ function init(){
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
-				for(var chip in game.dealt){
-					if(player.blackjack)
-						player.chips[chip] += game.dealt[chip] * 3;
-					else
-						player.chips[chip] += game.dealt[chip] * 2;
-				}
+				player.chips = game.chipsFromValue(this.funds);
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
@@ -605,10 +600,7 @@ function init(){
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
-				for(var chip in game.dealt){
-					l([chip, game.dealt[chip]].join(' '))
-					player.chips[chip] += game.dealt[chip] ;
-				}
+				player.chips = game.chipsFromValue(this.funds);
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
