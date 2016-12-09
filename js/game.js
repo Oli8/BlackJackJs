@@ -243,13 +243,13 @@ function init(){
 				bank.cardsContainer = new createjs.Container();
 				bank.cardsContainer.y = -100;
 				stage.addChild(bank.cardsContainer);
-				bank.cardsContainer.x = 450; //do this better later
+				bank.cardsContainer.x = 450;
 			}
 			if(!player.cardsContainer){
 				player.cardsContainer = new createjs.Container();
 				player.cardsContainer.y = 300;
 				stage.addChild(player.cardsContainer);
-				player.cardsContainer.x = 450; //do this better later
+				player.cardsContainer.x = 450;
 			}
 
 			if(owner === 'bank'){
@@ -261,7 +261,6 @@ function init(){
 				createjs.Tween.get(bankCard)
 					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				bank.cardsContainer.x -= 20;
-				l('bank: ' + this.deckValue(bank.deck));
 			}
 			else if(owner === 'player'){
 				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
@@ -272,7 +271,6 @@ function init(){
 				createjs.Tween.get(playerCard)
 					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1))
 				player.cardsContainer.x -= 20;
-				l('player :' + this.deckValue(player.deck));
 				if(this.deckValue(player.deck) > 21){
 					player.lose();
 				}
@@ -324,7 +322,7 @@ function init(){
 					chipImg.y = base.y;
 					chipImg.color = chip;
 					chipImg.dealt = false;
-					//chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5);
+					//chipImg.shadow = new createjs.Shadow("#000000", 3, 3, 5); //too laggy :/
 					player.chipsContainer.addChild(chipImg);
 					base.y -= 10;
 					if(i === player.chips[chip] - 1){ //add click event on top chip
@@ -359,14 +357,10 @@ function init(){
 				.to({x: rand(350, 675) , y: rand(190, 350)}, 750, createjs.Ease.getPowInOut(1));
 			var color = chip.color;
 			player.dealt += this.chipsValue[color]; //add chip value to player.dealt
-			//l(player.dealt);
 			player.chips[color] -= 1; //Reduce player chips number
-			//l(player.chips);
 			player.funds -= game.chipsValue[color];
 			player.fundsText.update();
-			l(player.funds);
 			game.dealt[color] += 1;
-			l(game.dealt);
 			this.addChips();
 		},
 
@@ -405,7 +399,6 @@ function init(){
 		blackJack: false,
 
 		play: function(){
-			l('bank turn to play :D');
 			if(player.doubled && player.deck.length > 2)
 				player.cardsContainer.children[2].image.src = imgs.cards.get(player.deck[2].suit, player.deck[2].value);
 
@@ -415,7 +408,6 @@ function init(){
 			var total = game.deckValue(this.deck);
 			if(total < 17){
 				game.distributeCard('bank');
-				l(game.deckValue(this.deck))
 				if(game.deckValue(this.deck) < 17)
 					setTimeout(() => bank.play(), 1000);
 				else
@@ -469,7 +461,6 @@ function init(){
 		},
 
 		stand: function(){
-			l('stand!');
 			if(!this.betted)
 				return game._alert(messages.warning.bet);
 			game.inProgress = true;
@@ -477,14 +468,12 @@ function init(){
 		},
 
 		insure: function(){
-			l('insure');
 			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
 				this.insurance = Math.round(this.dealt / 2);
 				this.funds -= this.insurance;
 				this.chips = game.balanceChips(this.funds);
 				this.fundsText.update();
 				game._alert(messages.warning.insured)
-				l('use Insurance');
 			}
 			else
 				game._alert(messages.warning.insurance);
@@ -492,7 +481,6 @@ function init(){
 
 		double: function(){
 			if(game.inProgress && this.deck.length === 2 && !this.doubled){
-				l('double');
 				if(this.funds >= this.dealt){
 					game._alert(messages.warning.doubled);
 					this.doubled = true;
@@ -501,7 +489,6 @@ function init(){
 					this.chips = game.balanceChips(this.funds);
 					this.store();
 					game.addChips();
-					l(game.dealt);
 					for(var chip in game.dealt){
 						//update graphic dealtcontainer
 						for(let i=0; i<game.dealt[chip]; i++){
@@ -516,7 +503,6 @@ function init(){
 					for(var chip in game.dealt)
 						if(game.dealt[chip])
 							game.dealt[chip] *= 2;
-					l(game.dealt);
 					player.fundsText.update();
 				}
 				else
@@ -541,7 +527,6 @@ function init(){
 		},
 
 		win: function(){
-			l('win!');
 			game.message.text.text = messages.win;
 			setTimeout(function(){
 				game.end();
@@ -554,13 +539,10 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
-				l(player.chips);
 			}, 2000);
 		},
 
 		lose: function(){
-			l('lose');
-
 			game.message.text.text = messages.lose;
 			setTimeout(function(){
 				if(bank.blackjack && player.insurance){
@@ -575,12 +557,10 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
-				l(player.chips);
 			}, 2000);
 		},
 
 		draw: function(){
-			l('draw :|');
 			game.message.text.text = messages.draw;
 			setTimeout(function(){
 				if(bank.blackjack && player.insurance){
@@ -598,7 +578,6 @@ function init(){
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
-				l(player.chips);
 			}, 2000);
 		},
 
