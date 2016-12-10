@@ -111,6 +111,8 @@ function init(){
 			stage.enableMouseOver(10);
 			createjs.Ticker.addEventListener('tick', tick);
 			createjs.Ticker.setFPS(60);
+			createjs.Sound.registerSound('assets/sounds/sfx_lose.ogg', 'lose');
+			createjs.Sound.registerSound('assets/sounds/sfx_shieldUp.ogg', 'win');
 			if(localStorage.getItem('BlackJackJs-userName')){
 				player.name.value = localStorage.getItem('BlackJackJs-userName');
 				player.funds = localStorage.getItem('BlackJackJs-funds');
@@ -530,6 +532,7 @@ function init(){
 		win: function(){
 			game.message.text.text = messages.win;
 			setTimeout(function(){
+				createjs.Sound.play('win');
 				game.end();
 				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
 				player.fundsText.update();
@@ -548,6 +551,7 @@ function init(){
 			if(this.doubled && this.deck.length === 3)
 				this.cardsContainer.children[2].image.src = imgs.cards.get(this.deck[2].suit, this.deck[2].value);
 			setTimeout(function(){
+				createjs.Sound.play('lose');
 				if(bank.blackjack && player.insurance){
 					player.funds += player.insurance * 2;
 					player.chips = game.balanceChips(player.funds);
