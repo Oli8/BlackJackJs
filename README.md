@@ -11,4 +11,9 @@ Click on a chip to bet it and start playing !
 5 : ![5](https://raw.githubusercontent.com/Oli8/BlackJackJs/master/assets/PNG/Chips/chipRedWhite_side.png)    
 1: ![1](https://raw.githubusercontent.com/Oli8/BlackJackJs/master/assets/PNG/Chips/chipWhiteBlue_side.png)  
 
+## Options :
+**Double**  
+**Insurance**  
+**Give up**  
+
 Thanks to [Kenney Vleugels](http://www.kenney.nl) for the assets!  
