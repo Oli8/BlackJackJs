@@ -238,8 +238,6 @@ function init(){
 
 			this.deck.splice(index, 1);
 			this.displayCard(card, to);
-			l('bank : ' + this.deckValue(bank.deck));
-			l('player : ' + this.deckValue(player.deck));
 		},
 
 		displayCard: function(card, owner){
