@@ -539,7 +539,6 @@ function init(){
 				player.dealt = 0;
 				//get Chips
 				player.chips = game.balanceChips(player.funds);
-				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
@@ -561,6 +560,7 @@ function init(){
 					return game.over();
 				game.end();
 				player.dealt = 0;
+				player.chips = game.balanceChips(player.funds);
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
@@ -581,7 +581,6 @@ function init(){
 				player.dealt = 0;
 				//get Chips
 				player.chips = game.balanceChips(player.funds);
-				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
 				player.store();
