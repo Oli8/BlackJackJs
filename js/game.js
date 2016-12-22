@@ -179,6 +179,8 @@ function init(){
 			player.insurance = false;
 			player.doubled = false;
 			player.deck = [];
+			player.blackjack = false;
+			bank.blackjack = false;
 			bank.deck = [];
 			bank.cardsContainer.removeAllChildren();
 			player.cardsContainer.removeAllChildren();
@@ -375,11 +377,11 @@ function init(){
 				player.blackjack = true;
 
 			if(bank.blackjack && player.blackjack)
-				player.draw();
+				return player.draw();
 			else if(bank.blackjack)
-				player.lose();
+				return player.lose();
 			else if(player.blackjack)
-				player.win();
+				return player.win();
 
 			if(bankScore > 21)
 				player.win();
@@ -531,8 +533,8 @@ function init(){
 			game.message.text.text = messages.win;
 			setTimeout(function(){
 				createjs.Sound.play('win');
-				game.end();
 				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
+				game.end();
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
@@ -578,7 +580,7 @@ function init(){
 				player.fundsText.update();
 				player.dealt = 0;
 				//get Chips
-				player.chips = game.balanceChips(this.funds);
+				player.chips = game.balanceChips(player.funds);
 				player.blackjack = false;
 				game.resetChips(); //reset game.dealt
 				game.addChips();
