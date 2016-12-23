@@ -182,6 +182,11 @@ function init(){
 			player.blackjack = false;
 			bank.blackjack = false;
 			bank.deck = [];
+			player.dealt = 0;
+			player.chips = game.balanceChips(player.funds);
+			game.resetChips();
+			game.addChips();
+			player.store();
 			bank.cardsContainer.removeAllChildren();
 			player.cardsContainer.removeAllChildren();
 			this.message.text.text = messages.bet;
@@ -536,12 +541,6 @@ function init(){
 				player.funds += player.blackjack ? player.dealt * 3 : player.dealt * 2;
 				game.end();
 				player.fundsText.update();
-				player.dealt = 0;
-				//get Chips
-				player.chips = game.balanceChips(player.funds);
-				game.resetChips(); //reset game.dealt
-				game.addChips();
-				player.store();
 			}, 2000);
 		},
 
@@ -559,11 +558,6 @@ function init(){
 				if(player.funds <= 0)
 					return game.over();
 				game.end();
-				player.dealt = 0;
-				player.chips = game.balanceChips(player.funds);
-				game.resetChips(); //reset game.dealt
-				game.addChips();
-				player.store();
 			}, 2000);
 		},
 
@@ -578,12 +572,6 @@ function init(){
 				game.end();
 				player.funds += player.dealt;
 				player.fundsText.update();
-				player.dealt = 0;
-				//get Chips
-				player.chips = game.balanceChips(player.funds);
-				game.resetChips(); //reset game.dealt
-				game.addChips();
-				player.store();
 			}, 2000);
 		},
 
