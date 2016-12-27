@@ -113,6 +113,8 @@ function init(){
 			createjs.Ticker.setFPS(60);
 			createjs.Sound.registerSound('assets/sounds/sfx_lose.ogg', 'lose');
 			createjs.Sound.registerSound('assets/sounds/sfx_shieldUp.ogg', 'win');
+			createjs.Sound.registerSound('assets/Bonus/cardPlace1.ogg', 'card');
+			createjs.Sound.registerSound('assets/Bonus/chipsCollide1.ogg', 'chip');
 			if(localStorage.getItem('BlackJackJs-userName')){
 				player.name.value = localStorage.getItem('BlackJackJs-userName');
 				player.funds = localStorage.getItem('BlackJackJs-funds');
@@ -262,6 +264,7 @@ function init(){
 			}
 
 			if(owner === 'bank'){
+				createjs.Sound.play('card');
 				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var bankCard = new createjs.Bitmap(cardSrc);
 				bankCard.x = 0;
@@ -272,6 +275,7 @@ function init(){
 				bank.cardsContainer.x -= 20;
 			}
 			else if(owner === 'player'){
+				createjs.Sound.play('card');
 				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
 				var playerCard = new createjs.Bitmap(cardSrc);
 				playerCard.x = 100;
@@ -357,6 +361,7 @@ function init(){
 			if(chip.dealt || game.inProgress) return;
 			chip.dealt = true;
 			//remove chip from player.chipsContainer and add it to another container
+			createjs.Sound.play('chip');
 			player.chipsContainer.removeChildAt(player.chipsContainer.getChildIndex(chip));
 			chip.x = chip.x + player.chipsContainer.x;
 			chip.y = chip.y + player.chipsContainer.y;
