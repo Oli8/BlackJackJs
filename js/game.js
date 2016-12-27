@@ -263,25 +263,22 @@ function init(){
 				player.cardsContainer.x = 450;
 			}
 
+			createjs.Sound.play('card');
+			var card = new createjs.Bitmap(card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value));
+
 			if(owner === 'bank'){
-				createjs.Sound.play('card');
-				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
-				var bankCard = new createjs.Bitmap(cardSrc);
-				bankCard.x = 0;
-				bankCard.y = -100;
-				bank.cardsContainer.addChild(bankCard);
-				createjs.Tween.get(bankCard)
+				card.x = 0;
+				card.y = -100;
+				bank.cardsContainer.addChild(card);
+				createjs.Tween.get(card)
 					.to({x: 50 * bank.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1));
 				bank.cardsContainer.x -= 20;
 			}
 			else if(owner === 'player'){
-				createjs.Sound.play('card');
-				var cardSrc = card.hidden ? imgs.cards.path + imgs.cards.back.red + '.' + imgs.cards.ext : imgs.cards.get(card.suit, card.value);
-				var playerCard = new createjs.Bitmap(cardSrc);
-				playerCard.x = 100;
-				playerCard.y = -400;
-				player.cardsContainer.addChild(playerCard);
-				createjs.Tween.get(playerCard)
+				card.x = 100;
+				card.y = -400;
+				player.cardsContainer.addChild(card);
+				createjs.Tween.get(card)
 					.to({x: 50 * player.deck.length, y: 100}, 750, createjs.Ease.getPowInOut(1));
 				player.cardsContainer.x -= 20;
 				if(this.deckValue(player.deck) > 21)
