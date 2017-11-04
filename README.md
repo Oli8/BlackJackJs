@@ -2,7 +2,7 @@
 Black jack game made in Javascript with CreateJs  
 [demo](https://oli8.github.io/BlackJackJs)  
 
-Click on a chip to bet it and start playing !  
+Click on a chip to bet and start playing !  
 
 ## Chips Values :  
 500 : ![500](https://raw.githubusercontent.com/Oli8/BlackJackJs/master/assets/PNG/Chips/chipBlueWhite_side.png)  
