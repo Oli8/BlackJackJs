@@ -414,8 +414,10 @@ function init(){
 			else if(bankScore >= 17 && bankScore <= 21){
 				if(playerScore > bankScore)
 					player.win();
-				else
+				else if(playerScore < bankScore)
 					player.lose();
+				else
+					player.draw();
 			}
 		}
 
