@@ -17,6 +17,7 @@ function init(){
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
 			new Button('Go', '#fff', 935, -430, () => game.go()),
+			new Button('All in', '#fff', 950, 120, () => game.allIn()),
 			new Button('Insurance', '#fff', 100, -80, () => player.insure()),
 			//new Button('Split', '#fff', 100, -40, () => l('split')),
 			new Button('Double', '#fff', 100, -40, () => player.double()),
@@ -174,6 +175,22 @@ function init(){
 			}
 			else if(!player.dealt)
 				game._alert(messages.warning.bet);
+		},
+
+		allIn: function(){
+			if(this.inProgress) return;
+
+			createjs.Sound.play('chip');
+			Object.keys(player.chips).forEach(color => {
+				while(player.chips[color] > 0) {
+					game.throwChip(
+						player.chipsContainer.children.find(c => c.color === color && !c.dealt),
+						{ sound: false }
+					);
+				}
+			});
+
+			game.go();
 		},
 
 		end: function(){
@@ -356,11 +373,11 @@ function init(){
 			}
 		},
 
-		throwChip: function(chip){
+		throwChip: function(chip, { sound } = { sound: true }){
 			if(chip.dealt || game.inProgress) return;
 			chip.dealt = true;
 			//remove chip from player.chipsContainer and add it to another container
-			createjs.Sound.play('chip');
+			if (sound) createjs.Sound.play('chip');
 			player.chipsContainer.removeChildAt(player.chipsContainer.getChildIndex(chip));
 			chip.x = chip.x + player.chipsContainer.x;
 			chip.y = chip.y + player.chipsContainer.y;
